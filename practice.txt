@@ -1,1 +1,2 @@
 Git is being practiced.
+Git workflow is becoming natural.

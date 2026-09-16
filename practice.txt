@@ -4,3 +4,5 @@ Master branch change.
 First change.
 Second change.
 This change was made on GitHub.
+Remote main divergence practice.
+Local main divergence practice.

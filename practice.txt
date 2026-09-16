@@ -1,3 +1,6 @@
 Git is being practiced.
 Git workflow is becoming natural.
 Master branch change.
+First change.
+Second change.
+

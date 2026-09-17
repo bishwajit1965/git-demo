@@ -2,7 +2,7 @@
 
 ## 1. Git Fundamentals ✅
 
--- Git introduction
+- Git introduction
 -- Git vs GitHub
 -- Installation
 -- Configuration

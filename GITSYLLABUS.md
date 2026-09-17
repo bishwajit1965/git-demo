@@ -334,3 +334,6 @@ git push -u origin main
 git remote add origin https://github.com/bishwajit1965/git-demo.git
 git branch -M main
 git push -u origin main
+
+
+Fetch practice

@@ -53,7 +53,7 @@
 - Abort merge
 - Merge history
 
-## 5. Git Workflow
+## 5. Git Workflow ✅
 
 - Working with branches
 - Feature workflow
@@ -62,7 +62,7 @@
 - Clean commits
 - Team conventions
 
-## 6.GitHub & Remote Repositories
+## 6.GitHub & Remote Repositories ✅
 
 - GitHub
 - Remote repositories
@@ -71,8 +71,8 @@
 - Add remote
 - Set remote
 - Clone
-- Fetch
-- Pull
+- Fetch → [Fetch = get the remote changes and let me inspect them.]
+- Pull → [Pull = get the remote changes and integrate them into my current branch.]
 - Push
 - Remote branches
 - Tracking

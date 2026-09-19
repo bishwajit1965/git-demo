@@ -87,7 +87,7 @@
 - Test authentication
 - Secure authentication practices
 
-## 8. Forking & Contribution ⭐
+## 8. Forking & Collaboration / Contribution ⭐ ✅
 
 - What is a fork?
 - Fork vs clone
@@ -102,7 +102,7 @@
 - Contributing to another repository
 - Open-source workflow
 
-## 9. Pull Requests
+## 9. Pull Requests ✅
 
 - Create PR
 - PR branches
@@ -116,17 +116,38 @@
 
 ## 10. Undo & Modification
 
-- restore
-- Unstage
-- Amend
-- revert
-- reset
-- Soft reset
-- Mixed reset
-- Hard reset
+- restore → [restore → discard my file change]
+
+- Unstage → [restore --staged → unstage my change]
+
+- Amend → [fix my latest commit]
+
+- revert → [undo an existing commit with a new commit]
+
+- reset → [git reset = Move the branch/HEAD backward, optionally changing what is staged or kept in the working tree.]
+
+- Soft reset → [--soft moves HEAD backward but keeps the undone commit's changes staged.]
+
+- Mixed reset → [Mixed reset = move HEAD backward and unstage the changes.]
+
+- Hard reset → [Hard reset doesn't know which changes you care about. It resets the working tree to the target commit.]
+
 - Reset vs revert
+
 - Local vs shared history
+
 - Safe/unsafe situations
+
+|=======================================================
+|
+| COMMAND       HEAD     Staging     Working Tree
+|
+|=======================================================
+| --soft        moves      KEEP          KEEP
+| --mixed       moves      CLEAR         KEEP
+| --hard        MOVE       CLEAR          RESET/DISCARD
+|
+|-------------------------------------------------------
 
 ## 11. Rebase
 

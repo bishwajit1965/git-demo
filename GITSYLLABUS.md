@@ -18,6 +18,583 @@
 - Diff
 - Help
 
+### Footnote — Git Fundamentals
+
+**What is Git?**
+
+Git is a distributed version-control system used to track changes in files and coordinate development work.
+
+**Mental model:**
+
+> **Git = a system that records the evolution of a project so developers can track, compare, recover, and collaborate on changes.**
+
+Git is not simply a tool for uploading code to GitHub. Git works locally and provides the foundation for version-controlled development.
+
+---
+
+### Why use Git?
+
+Git helps developers:
+
+* track changes
+* create safe checkpoints
+* compare versions
+* recover previous work
+* experiment safely
+* work with branches
+* collaborate with other developers
+* review changes
+* maintain project history
+* synchronize work with remote repositories
+
+Without version control, recovering from a bad change often depends on manual backups or remembering what was changed.
+
+---
+
+### Git vs GitHub
+
+These are different things.
+
+| Git                          | GitHub                                                 |
+| ---------------------------- | ------------------------------------------------------ |
+| Version-control system       | Hosting/collaboration platform                         |
+| Runs locally                 | Runs primarily as a remote service                     |
+| Tracks project history       | Hosts Git repositories                                 |
+| Creates commits              | Provides collaboration features                        |
+| Supports branches and merges | Provides Pull Requests, Issues, Reviews, Actions, etc. |
+
+Mental model:
+
+```text
+Git
+ ↓
+Local version control
+
+GitHub
+ ↓
+Remote hosting + collaboration
+```
+
+Git works without GitHub.
+
+---
+
+### The Three Main Git Areas
+
+A fundamental Git concept is the relationship between:
+
+```text id="h7p2kd"
+Working Tree
+     ↓
+Staging Area
+     ↓
+Repository
+```
+
+#### 1. Working Tree
+
+The files you are currently editing.
+
+Example:
+
+```text
+README.md
+practice.txt
+src/
+```
+
+Changes made here have not yet been recorded by Git.
+
+---
+
+#### 2. Staging Area
+
+The staging area contains changes selected for the next commit.
+
+```bash id="q8n4mx"
+git add <file>
+```
+
+This means:
+
+> Put this change into the next commit.
+
+You can stage some files while leaving other changes unstaged.
+
+---
+
+#### 3. Repository
+
+The repository contains Git's recorded history.
+
+A commit stores a snapshot of the project at a particular point in time.
+
+```bash id="r5c9zt"
+git commit -m "Add feature"
+```
+
+---
+
+### The Basic Git Cycle
+
+The fundamental development cycle is:
+
+```text id="v2m6qs"
+Edit
+ ↓
+git status
+ ↓
+git diff
+ ↓
+git add
+ ↓
+git diff --cached
+ ↓
+git commit
+ ↓
+git log
+```
+
+Each command answers a different question.
+
+| Command             | Question                           |
+| ------------------- | ---------------------------------- |
+| `git status`        | What is happening?                 |
+| `git diff`          | What changed but is not staged?    |
+| `git add`           | What do I want in the next commit? |
+| `git diff --cached` | What exactly am I about to commit? |
+| `git commit`        | Record the selected changes        |
+| `git log`           | What has already been recorded?    |
+
+---
+
+### `git status`
+
+One of the most important Git commands:
+
+```bash id="n6x3wr"
+git status
+```
+
+It tells you:
+
+* current branch
+* modified files
+* staged files
+* untracked files
+* whether the working tree is clean
+
+Professional habit:
+
+> **When uncertain, run `git status`.**
+
+---
+
+### `git diff`
+
+To inspect unstaged changes:
+
+```bash id="t8q4vz"
+git diff
+```
+
+This shows what has changed in the working tree compared with the staged/committed state.
+
+---
+
+### `git add`
+
+Stage a file:
+
+```bash id="k2m7pc"
+git add README.md
+```
+
+Stage multiple specific files:
+
+```bash id="x5r8nb"
+git add file1.txt file2.txt
+```
+
+Stage everything:
+
+```bash id="w9c3yd"
+git add .
+```
+
+The important concept is:
+
+> **`git add` does not commit anything. It selects changes for the next commit.**
+
+---
+
+### `git diff --cached`
+
+Before committing, inspect staged changes:
+
+```bash id="p4v6sk"
+git diff --cached
+```
+
+This answers:
+
+> What exactly will go into my next commit?
+
+This is an important professional habit because it prevents accidentally committing unrelated changes.
+
+---
+
+### `git commit`
+
+Create a checkpoint:
+
+```bash id="m7q2xa"
+git commit -m "Add Git fundamentals practice"
+```
+
+A commit records the staged changes in Git history.
+
+A good commit message should describe the change clearly.
+
+Good:
+
+```text
+Add authentication middleware
+```
+
+Poor:
+
+```text
+update
+```
+
+---
+
+### Commits Are Checkpoints
+
+Think of commits as checkpoints:
+
+```text id="u3k9bf"
+A ── B ── C ── D
+```
+
+Each commit represents a meaningful point in the project's evolution.
+
+If something goes wrong later, Git gives you historical points to inspect and potentially recover from.
+
+---
+
+### Untracked vs Modified vs Staged
+
+These three states are fundamental.
+
+```text id="q6w4mz"
+Untracked
+   ↓
+git add
+   ↓
+Staged
+   ↓
+git commit
+   ↓
+Committed
+```
+
+For an existing tracked file:
+
+```text id="e8r2yp"
+Modified
+   ↓
+git add
+   ↓
+Staged
+   ↓
+git commit
+   ↓
+Committed
+```
+
+Understanding these states is more important than memorizing individual commands.
+
+---
+
+### Working Tree Clean
+
+When Git reports:
+
+```text id="c7m4qa"
+nothing to commit, working tree clean
+```
+
+it means Git sees no changes waiting to be committed.
+
+Mental model:
+
+```text
+Working Tree = committed state
+Staging Area = empty
+```
+
+---
+
+### `.git` Directory
+
+When a directory becomes a Git repository:
+
+```bash id="z5n8kr"
+git init
+```
+
+Git creates a hidden `.git` directory.
+
+Conceptually:
+
+```text
+project/
+├── source files
+├── README.md
+└── .git/
+```
+
+The `.git` directory contains Git's repository data and history.
+
+**Do not manually modify files inside `.git` unless you specifically know what you are doing.**
+
+---
+
+### Initializing a Repository
+
+To create a Git repository:
+
+```bash id="a9p3xd"
+git init
+```
+
+Then check:
+
+```bash id="f6w2mc"
+git status
+```
+
+Git will tell you that the repository has been initialized.
+
+---
+
+### Git Configuration
+
+Git uses configuration to identify the author of commits.
+
+Typical configuration:
+
+```bash id="k7v4ps"
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+You can inspect configuration with:
+
+```bash id="m5x8qr"
+git config --list
+```
+
+Later, signing configuration can also be added for verified commits.
+
+---
+
+### Git and the Commit Graph
+
+Git internally represents commits as a graph.
+
+A simple history:
+
+```text id="s4n7tc"
+A ── B ── C
+```
+
+Branches make the graph diverge:
+
+```text id="d8q2mv"
+       C ── D
+      /
+A ── B
+      \
+       E ── F
+```
+
+This graph model becomes increasingly important when learning:
+
+* branching
+* merging
+* rebasing
+* cherry-picking
+* remote history
+
+---
+
+### What We Practiced
+
+During Git Fundamentals we established the foundation for everything that followed:
+
+* repository initialization
+* working tree
+* staging area
+* commits
+* `git status`
+* `git diff`
+* `git add`
+* `git diff --cached`
+* `git commit`
+* basic history inspection
+* Git configuration
+* clean working tree
+* understanding tracked and untracked files
+
+The goal was not to memorize commands.
+
+The goal was to understand **Git's basic state model**.
+
+---
+
+### Useful Commands
+
+Initialize repository:
+
+```bash id="q2k8vs"
+git init
+```
+
+Check state:
+
+```bash id="b5m9xz"
+git status
+```
+
+View unstaged changes:
+
+```bash id="p8c4yd"
+git diff
+```
+
+Stage a file:
+
+```bash id="w3n6ka"
+git add <file>
+```
+
+View staged changes:
+
+```bash id="r7q2mc"
+git diff --cached
+```
+
+Commit:
+
+```bash id="j4v8sp"
+git commit -m "Meaningful message"
+```
+
+View history:
+
+```bash id="x6m2qt"
+git log --oneline
+```
+
+View configuration:
+
+```bash id="c9k5zr"
+git config --list
+```
+
+---
+
+### Professional Git Habit
+
+Before changing anything:
+
+```bash id="v7q3mn"
+git status
+```
+
+Before committing:
+
+```bash id="t4m8xc"
+git diff
+git diff --cached
+```
+
+After committing:
+
+```bash id="p6r2yk"
+git status
+git log --oneline
+```
+
+This simple discipline prevents many avoidable mistakes.
+
+---
+
+### What We Learned
+
+1. Git is version control, not merely code hosting.
+2. Git works locally.
+3. Git tracks project evolution through commits.
+4. The working tree contains current edits.
+5. The staging area selects changes for the next commit.
+6. The repository stores recorded history.
+7. `git status` is the primary situational-awareness command.
+8. `git diff` helps inspect changes before committing.
+9. `git add` stages changes.
+10. `git commit` records a checkpoint.
+11. Meaningful commits create useful history.
+12. Git's commit graph becomes the foundation for branches and integration.
+
+---
+
+### Practical Professional Rule
+
+> **Never commit blindly. Know what changed, know what is staged, then commit deliberately.**
+
+The habit is:
+
+```text
+Status → Inspect → Stage → Inspect → Commit
+```
+
+---
+
+### Final Mental Model
+
+Think of Git as a controlled pipeline:
+
+```text id="n8w5pk"
+             ┌───────────────┐
+             │  Working Tree │
+             └───────┬───────┘
+                     │
+                  git add
+                     ↓
+             ┌───────────────┐
+             │ Staging Area  │
+             └───────┬───────┘
+                     │
+                git commit
+                     ↓
+             ┌───────────────┐
+             │   Repository  │
+             │    History    │
+             └───────────────┘
+```
+
+You control what moves through each stage.
+
+**Working Tree → Staging Area → Commit → History**
+
+---
+
+### Core Lesson
+
+> **Git Fundamentals is about understanding the state of your work and deliberately moving changes from your working tree into permanent project history.**
+
 ## 🚀 2. Git History ✅
 
 - Log

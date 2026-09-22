@@ -2,65 +2,65 @@
 
 ## 🚀 1. Git Fundamentals ✅
 
-💎 Git introduction
-💎 Git vs GitHub
-💎 Installation
-💎 Configuration
-💎 Get Started
-💎 Repository
-💎 Working tree
-💎 Staging area
-💎 Commits
-💎 New files
-💎 Staging
-💎 Commit
-💎 Status
-💎 Diff
-💎 Help
+- Git introduction
+- Git vs GitHub
+- Installation
+- Configuration
+- Get Started
+- Repository
+- Working tree
+- Staging area
+- Commits
+- New files
+- Staging
+- Commit
+- Status
+- Diff
+- Help
 
 ## 🚀 2. Git History ✅
 
-💎 Log
-💎 Show
-💎 Commit hashes
-💎 HEAD
-💎 Parent commits
-💎 Comparing commits
-💎 History inspection
-💎 Commit messages
-💎 Amend
+- Log
+- Show
+- Commit hashes
+- HEAD
+- Parent commits
+- Comparing commits
+- History inspection
+- Commit messages
+- Amend
 
 ## 🚀 3. Git Branching ✅
 
-💎 Branch concept
-💎 Create branch
-💎 Switch branch
-💎 Rename branch
-💎 Delete branch
-💎 Branch listing
-💎 Branch pointers
-💎 Tracking branches
-💎 Feature branches
+- Branch concept
+- Create branch
+- Switch branch
+- Rename branch
+- Delete branch
+- Branch listing
+- Branch pointers
+- Tracking branches
+- Feature branches
 
 ## 🚀 4. Merge ✅
 
--💎 Fast-forward merge
--💎 Three-way merge
--💎 Merge
--💎 Merge conflicts
--💎 Conflict markers
--💎 Conflict resolution
--💎 Abort merge
--💎 Merge history
+- Fast-forward merge
+- Three-way merge
+- Merge
+- Merge conflicts
+- Conflict markers
+- Conflict resolution
+- Abort merge
+- Merge history
 
 ## 🚀 5. Git Workflow ✅
 
-💎 Working with branches
-💎 Feature workflow
-💎 Main/development concepts
-💎 Best practices
-💎 Clean commits
-💎 Team conventions
+- Working with branches
+- Feature workflow
+- Main/development concepts
+- Best practices
+- Clean commits
+- Team conventions
 
 ## 🚀 6.GitHub & Remote Repositories ✅
 

@@ -78,6 +78,407 @@
 - Tracking
 - Branch synchronization
 
+Footnote — GitHub & Remote Repositories
+
+What is a remote repository?
+
+A remote repository is a Git repository stored somewhere outside your local development environment, commonly on a platform such as GitHub.
+
+It provides a place to store, share, synchronize, and collaborate on Git history and project files.
+
+Mental model:
+
+Local repository = my working copy and local history. Remote repository = the shared copy that other people and systems can access.
+
+A typical relationship looks like:
+
+Local Repository
+      │
+      │ push
+      ↓
+Remote Repository
+      │
+      │ fetch / pull
+      ↓
+Local Repository
+What is GitHub?
+
+GitHub is a platform for hosting Git repositories and providing collaboration features around them.
+
+Git itself is the version-control system.
+
+GitHub adds services such as:
+
+Remote repository hosting.
+Pull Requests.
+Code review.
+Issues.
+Repository permissions.
+Releases.
+Actions and CI/CD.
+Collaboration tools.
+
+Therefore:
+
+Git is the version-control tool; GitHub is a platform built around Git repositories.
+
+Why use a remote repository?
+
+A remote repository provides several important benefits.
+
+It allows you to:
+
+Back up your project history remotely.
+Access the project from different machines.
+Share code with other developers.
+Collaborate through branches and Pull Requests.
+Connect repositories to CI/CD systems.
+Publish releases.
+Maintain a public record of development work.
+
+For professional development, GitHub also becomes an important part of a developer's technical portfolio.
+
+Local vs remote repository
+
+A local Git repository exists on your computer:
+
+D:/trials/git-demo/.git
+
+A remote repository can exist on GitHub:
+
+github.com/username/git-demo
+
+They are separate repositories connected through Git.
+
+The local repository does not automatically synchronize with GitHub.
+
+You explicitly transfer information using commands such as:
+
+git push
+git fetch
+git pull
+The origin remote
+
+When a GitHub repository is connected as a remote, Git commonly names that remote:
+
+origin
+
+You can inspect it with:
+
+git remote -v
+
+Typical output:
+
+origin  https://github.com/username/git-demo.git
+origin  https://github.com/username/git-demo.git
+
+origin is only a conventional name.
+
+It is not a special Git keyword.
+
+You could technically use another name, but origin is the standard convention for the primary remote.
+
+What we practiced
+
+Using the git-demo repository, we connected the local Git repository to GitHub and practiced the basic local-to-remote workflow.
+
+The practice included:
+
+Creating and using a GitHub repository.
+Connecting the local repository to the remote.
+Inspecting remote configuration.
+Pushing local commits to GitHub.
+Fetching remote information.
+Pulling remote changes.
+Understanding local and remote branches.
+Tracking a remote branch.
+Understanding how local and remote histories can diverge.
+Using GitHub as the collaboration point for the repository.
+Adding a remote
+
+A local repository can be connected to GitHub with:
+
+git remote add origin <repository-url>
+
+For an HTTPS repository:
+
+git remote add origin https://github.com/username/git-demo.git
+
+Then verify:
+
+git remote -v
+
+This establishes the relationship:
+
+Local repository
+      │
+      │ origin
+      ↓
+GitHub repository
+Push
+
+git push transfers local commits to the remote repository.
+
+For example:
+
+git push -u origin main
+
+The first push commonly uses -u to establish an upstream tracking relationship.
+
+After that, future pushes can often be performed simply with:
+
+git push
+
+Mental model:
+
+Push = send my local commits to the remote repository.
+
+Fetch
+
+git fetch retrieves information from the remote repository without automatically changing your current working branch.
+
+git fetch origin
+
+It updates your knowledge of the remote repository.
+
+Mental model:
+
+Fetch = download remote information; don't automatically integrate it into my current work.
+
+This makes fetch a relatively safe way to inspect what has changed remotely.
+
+Pull
+
+git pull generally performs two operations:
+
+git fetch
+   +
+integration
+
+For example:
+
+git pull origin main
+
+The exact integration mechanism can depend on configuration and Git version, but conceptually:
+
+Pull = get remote changes and integrate them into the current branch.
+
+Fetch vs pull
+
+This distinction is important.
+
+Fetch
+git fetch
+
+Gets remote information but leaves your current branch unchanged.
+
+Pull
+git pull
+
+Gets remote changes and integrates them into your current branch.
+
+Mental model:
+
+fetch
+  → "Show me what changed remotely."
+
+pull
+  → "Bring those changes into my current work."
+Remote-tracking branches
+
+When Git communicates with a remote, it maintains remote-tracking references such as:
+
+origin/main
+
+This is not the same thing as your local:
+
+main
+
+Think of them as:
+
+main
+  → my local branch
+
+origin/main
+  → my local record of the remote main branch
+
+They can temporarily point to different commits.
+
+Local and remote branches can diverge
+
+Suppose:
+
+A ── B ── C        main
+      \
+       D ── E      origin/main
+
+The local and remote histories are no longer identical.
+
+This is why understanding fetch, pull, push, merge, and rebase becomes important.
+
+Git does not automatically assume that two different histories should simply overwrite one another.
+
+Upstream tracking
+
+When you run:
+
+git push -u origin main
+
+Git records a relationship between the local branch and the remote-tracking branch.
+
+Conceptually:
+
+main
+  ↕
+origin/main
+
+This allows commands such as:
+
+git push
+git pull
+
+to know which remote branch is associated with the current local branch.
+
+GitHub as collaboration infrastructure
+
+Once the repository is on GitHub, Git becomes part of a larger development workflow:
+
+Local development
+       ↓
+Git commits
+       ↓
+Push
+       ↓
+GitHub
+       ↓
+Branches
+       ↓
+Pull Requests
+       ↓
+Review
+       ↓
+Merge
+       ↓
+CI/CD
+
+This is why GitHub knowledge is important for professional development.
+
+Knowing Git commands alone is not enough; developers also need to understand how Git is used inside a collaborative platform.
+
+GitHub repository as a portfolio
+
+A public GitHub repository can also provide evidence of practical development ability.
+
+A well-maintained repository can demonstrate:
+
+Meaningful commits.
+Branching workflow.
+Pull Requests.
+Documentation.
+Tests.
+CI/CD.
+Releases.
+Real project structure.
+Consistent development activity.
+
+The repository therefore becomes more than storage.
+
+It can become part of a developer's professional evidence.
+
+Useful commands
+# Inspect remotes
+git remote -v
+
+# Add a remote
+git remote add origin <repository-url>
+
+# Change a remote URL
+git remote set-url origin <repository-url>
+
+# Push a branch
+git push -u origin main
+
+# Push later changes
+git push
+
+# Fetch remote information
+git fetch origin
+
+# Pull and integrate remote changes
+git pull origin main
+
+# Inspect all branches
+git branch -a
+What we learned
+
+The important lesson was understanding the relationship between:
+
+Local repository
+       ↕
+     Git
+       ↕
+Remote repository
+       ↕
+     GitHub
+
+We learned that:
+
+git push
+→ sends local commits to remote
+
+git fetch
+→ retrieves remote information
+
+git pull
+→ retrieves and integrates remote changes
+
+And:
+
+main
+→ local branch
+
+origin/main
+→ remote-tracking reference
+
+These concepts form the foundation for later topics such as Pull Requests, collaboration, CI/CD, and professional team workflows.
+
+Practical professional rule
+
+Never think of push, fetch, and pull as interchangeable. Know whether you are publishing your work, inspecting remote changes, or integrating remote changes into your local branch.
+
+Before synchronizing repositories, understand which direction the data is moving:
+
+push
+Local → Remote
+
+fetch
+Remote → Local knowledge
+
+pull
+Remote → Local + integration
+Final mental model
+                 GitHub
+                   │
+             Remote Repository
+                   │
+        ┌──────────┴──────────┐
+        │                     │
+      fetch                  push
+        ↓                     ↑
+ Remote information       Local commits
+        │                     │
+        └──────────┬──────────┘
+                   │
+            Local Repository
+                   │
+                  pull
+                   ↓
+             Fetch + Integrate
+
+Core lesson:
+
+A remote repository is not simply a backup folder. It is the shared point where local Git development connects with collaboration, review, automation, and professional software delivery.
+
 ## 🚀 7. GitHub Authentication
 
 - HTTPS
@@ -86,6 +487,379 @@
 - Add SSH key to GitHub
 - Test authentication
 - Secure authentication practices
+
+### Footnote — GitHub Authentication
+
+**What is GitHub Authentication?**
+
+GitHub authentication is the process Git uses to **prove that you are authorized to access a GitHub repository** when performing operations such as cloning, pulling, or pushing.
+
+For GitHub repositories, the two common authentication approaches are:
+
+- **HTTPS**
+- **SSH**
+
+**Mental model:**
+
+> **Authentication = proving to GitHub that this Git operation is being performed by an authorized account.**
+
+---
+
+## Why is authentication important?
+
+Git can work entirely on a local machine without authentication.
+
+Authentication becomes important when Git communicates with a remote repository such as GitHub.
+
+For example:
+
+```text id="h7g8x3"
+Local Repository
+      │
+      │ git push
+      ↓
+    GitHub
+      │
+      ↓
+Authentication
+      │
+      ↓
+Authorized?
+   ↙       ↘
+ Yes        No
+ ↓           ↓
+Push       Rejected
+```
+
+Without successful authentication, GitHub will not allow protected repository operations.
+
+---
+
+## HTTPS authentication
+
+HTTPS uses a repository URL such as:
+
+```text id="x4j6m2"
+https://github.com/username/repository.git
+```
+
+When Git connects to GitHub over HTTPS, authentication is handled through GitHub's supported credential mechanisms.
+
+GitHub no longer accepts a normal account password for Git operations over HTTPS.
+
+Instead, HTTPS authentication can use a **Personal Access Token (PAT)** or a credential manager.
+
+The important mental model is:
+
+> **The HTTPS URL identifies the remote repository; credentials prove that you are authorized to access it.**
+
+---
+
+## What we used
+
+For the `git-demo` repository, the remote was configured using HTTPS.
+
+The remote can be inspected with:
+
+```bash id="8m4y8c"
+git remote -v
+```
+
+This allows you to verify where Git is sending and retrieving repository data.
+
+A typical result looks like:
+
+```text id="7t6p4q"
+origin  https://github.com/username/git-demo.git
+```
+
+---
+
+## HTTPS authentication workflow
+
+The basic workflow is:
+
+```text id="j7q2m8"
+Local Git Repository
+        ↓
+git push
+        ↓
+GitHub HTTPS endpoint
+        ↓
+Credential authentication
+        ↓
+GitHub authorizes operation
+        ↓
+Push accepted
+```
+
+Once credentials are securely stored by the credential manager, repeated operations can often be performed without manually entering credentials every time.
+
+---
+
+## Personal Access Token
+
+A **Personal Access Token (PAT)** can be used instead of a GitHub account password for HTTPS Git authentication.
+
+A token should be treated like a password or other credential.
+
+It should:
+
+- Be protected.
+- Have only the permissions required.
+- Never be committed to a repository.
+- Never be placed inside source code.
+- Never be shared publicly.
+
+If a token is exposed, it should be revoked and replaced.
+
+---
+
+## SSH authentication
+
+SSH provides another common authentication mechanism.
+
+Instead of authenticating with HTTPS credentials, SSH uses a cryptographic key pair.
+
+The basic model is:
+
+```text id="y0x5vw"
+Private Key
+     ↓
+Your computer
+
+Public Key
+     ↓
+GitHub
+```
+
+The private key remains on your computer.
+
+The public key can be registered with GitHub.
+
+GitHub can then verify that the connection is associated with the corresponding key.
+
+---
+
+## HTTPS vs SSH
+
+Both approaches can provide authenticated access to GitHub repositories.
+
+| HTTPS                                | SSH                                 |
+| ------------------------------------ | ----------------------------------- |
+| Uses HTTPS remote URL                | Uses SSH remote URL                 |
+| Commonly uses PAT/credential manager | Uses SSH key pair                   |
+| Easy to understand and configure     | Convenient once configured          |
+| Works well with credential managers  | Strong cryptographic authentication |
+| Credentials must be protected        | Private key must be protected       |
+
+Neither should be treated as inherently mandatory for every developer.
+
+The appropriate choice depends on the developer's environment and workflow.
+
+---
+
+## What we completed
+
+For the Git learning syllabus, we completed the **HTTPS authentication path** and successfully used it with the `git-demo` repository.
+
+The repository remote was configured for GitHub over HTTPS, allowing authenticated operations such as pushing changes.
+
+We intentionally did not continue into a full SSH setup because the HTTPS workflow was sufficient for the Git developer-level syllabus.
+
+SSH remains a useful professional skill that can be learned when a particular environment requires or benefits from it.
+
+---
+
+## Authentication vs authorization
+
+These terms are related but different.
+
+### Authentication
+
+Answers:
+
+> **Who are you?**
+
+### Authorization
+
+Answers:
+
+> **What are you allowed to do?**
+
+For example:
+
+```text id="q7f4xy"
+Authentication
+     ↓
+Identify the GitHub account
+     ↓
+Authorization
+     ↓
+Determine whether that account can push
+```
+
+Successfully authenticating does not automatically mean that every repository operation is permitted.
+
+Repository permissions still matter.
+
+---
+
+## Authentication and remote repositories
+
+Git authentication becomes relevant whenever Git communicates with a remote repository.
+
+Examples include:
+
+```bash id="2o6n3v"
+git clone <repository-url>
+git fetch
+git pull
+git push
+```
+
+Local operations such as:
+
+```bash id="n8r6f1"
+git status
+git add .
+git commit
+```
+
+normally do not require GitHub authentication because they operate on the local repository.
+
+---
+
+## Security principles
+
+Authentication credentials are sensitive.
+
+Never do this:
+
+```text
+commit PAT
+paste private SSH key
+store token in source code
+publish credentials in README
+```
+
+Instead:
+
+```text
+Credential
+    ↓
+Secure credential storage
+    ↓
+Git operation
+    ↓
+GitHub
+```
+
+The repository should contain **code and configuration templates**, not private authentication credentials.
+
+---
+
+## What we learned
+
+The important lesson was that Git and GitHub are separate systems.
+
+Git provides the version-control mechanism.
+
+GitHub provides the remote hosting and collaboration platform.
+
+Authentication establishes a trusted connection between your local Git environment and the GitHub account/repository you are authorized to use.
+
+```text id="x2n6qa"
+Git
+ ↓
+Local version control
+
+GitHub
+ ↓
+Remote repository + collaboration
+
+Authentication
+ ↓
+Prove access to GitHub
+
+Authorization
+ ↓
+Determine permitted operations
+```
+
+---
+
+## Useful commands
+
+```bash id="q3k8vs"
+# Inspect remote repository
+git remote -v
+
+# Add an HTTPS remote
+git remote add origin https://github.com/username/repository.git
+
+# Change an existing remote
+git remote set-url origin https://github.com/username/repository.git
+
+# Push a branch
+git push -u origin main
+
+# Fetch remote changes
+git fetch origin
+
+# Pull remote changes
+git pull origin main
+```
+
+---
+
+## Practical professional rule
+
+> **Treat GitHub credentials like production credentials: protect them, never commit them, and grant only the access that is actually required.**
+
+For HTTPS, protect your token and credential-manager access.
+
+For SSH, protect your private key and passphrase.
+
+The authentication method can change, but the security principle does not.
+
+---
+
+## Final mental model
+
+```text
+HTTPS
+  ↓
+Remote URL
+  ↓
+Credential / PAT
+  ↓
+GitHub authentication
+  ↓
+Repository authorization
+  ↓
+Git operation allowed
+```
+
+or:
+
+```text
+SSH
+  ↓
+SSH remote URL
+  ↓
+Private/Public key pair
+  ↓
+GitHub authentication
+  ↓
+Repository authorization
+  ↓
+Git operation allowed
+```
+
+**Core lesson:**
+
+> **Git handles version control; GitHub handles remote collaboration; authentication establishes trusted access between them.**
 
 ## 🚀 8. Forking & Collaboration / Contribution ⭐ ✅
 
@@ -102,6 +876,470 @@
 - Contributing to another repository
 - Open-source workflow
 
+### Footnote — Git Forking & Collaboration / Contribution
+
+**What is Forking?**
+
+A **fork** is a copy of another user's or organization's repository under your own GitHub account.
+
+Forking is especially useful when you want to contribute to a repository where you **do not have direct write access**.
+
+**Mental model:**
+
+> **Fork = create my own GitHub copy of someone else's repository so I can work independently and propose changes back to the original project.**
+
+A typical open-source contribution workflow looks like:
+
+```text
+Original Repository
+        │
+        ↓
+       Fork
+        │
+        ↓
+Your GitHub Repository
+        │
+        ↓
+Feature Branch
+        │
+        ↓
+Changes + Commits
+        │
+        ↓
+Pull Request
+        │
+        ↓
+Original Repository
+```
+
+---
+
+## Why use a fork?
+
+Forking allows developers to contribute without requiring direct permission to modify the original repository.
+
+It is commonly used for:
+
+* Open-source contributions.
+* Contributing to projects owned by another person or organization.
+* Experimenting with an existing project safely.
+* Developing changes independently before proposing them upstream.
+* Maintaining a personal copy of a project.
+
+Forking creates a boundary between the **original repository** and your own working copy.
+
+---
+
+## Fork vs Clone
+
+These two concepts are related but different.
+
+### Fork
+
+A fork is created on the **GitHub platform**.
+
+```text
+Original GitHub Repository
+          ↓
+       GitHub Fork
+          ↓
+Your GitHub Repository
+```
+
+### Clone
+
+A clone copies a repository from a remote location to your **local computer**.
+
+```bash
+git clone <repository-url>
+```
+
+So:
+
+> **Fork = GitHub-side copy**
+
+> **Clone = local working copy**
+
+A common contribution workflow uses both:
+
+```text
+Original repository
+        ↓
+       Fork
+        ↓
+Your GitHub repository
+        ↓
+      Clone
+        ↓
+Your computer
+```
+
+---
+
+## Fork vs Branch
+
+A branch and a fork solve different problems.
+
+### Branch
+
+A branch is another line of development **inside the same repository**.
+
+```text
+Repository
+   ├── main
+   ├── feature
+   └── bugfix
+```
+
+### Fork
+
+A fork creates another repository under a different GitHub account.
+
+```text
+User A's repository
+        │
+        ↓
+User B's fork
+```
+
+Therefore:
+
+> **Branch = separation inside a repository**
+
+> **Fork = separation between repositories/accounts**
+
+---
+
+## What we practiced
+
+Using GitHub and the `git-demo` learning workflow, we explored the contribution model behind forks and collaboration.
+
+The practice established the relationship between:
+
+* Original repository.
+* Forked repository.
+* Local clone.
+* Branches.
+* Commits.
+* Remote repositories.
+* Pull Requests.
+* Contribution to the upstream project.
+
+The objective was to understand how a developer can contribute to a project **without directly owning or modifying its main repository**.
+
+---
+
+## The contributor workflow
+
+A typical contribution begins by forking the repository on GitHub.
+
+After the fork exists, clone your fork locally:
+
+```bash
+git clone <your-fork-url>
+```
+
+Move into the repository:
+
+```bash
+cd <repository>
+```
+
+Then create a feature branch:
+
+```bash
+git switch -c feature-name
+```
+
+Make the required changes and commit them:
+
+```bash
+git add .
+git commit -m "Implement feature"
+```
+
+Push the branch to your fork:
+
+```bash
+git push -u origin feature-name
+```
+
+Then create a Pull Request from your fork to the original repository.
+
+---
+
+## Origin and upstream
+
+Fork-based workflows often use two remote names:
+
+```text
+origin
+  ↓
+Your fork
+
+upstream
+  ↓
+Original repository
+```
+
+For example:
+
+```bash
+git remote -v
+```
+
+might show:
+
+```text
+origin    → your GitHub fork
+upstream  → original project
+```
+
+This distinction is important because your fork and the original project can continue to develop independently.
+
+---
+
+## Keeping your fork synchronized
+
+The original repository may receive changes while you are working on your fork.
+
+You can retrieve those changes from the upstream repository:
+
+```bash
+git fetch upstream
+```
+
+Then integrate the appropriate upstream changes into your local branch using the workflow chosen by the project.
+
+For example:
+
+```bash
+git merge upstream/main
+```
+
+or, where appropriate:
+
+```bash
+git rebase upstream/main
+```
+
+The exact synchronization strategy depends on the project's contribution guidelines.
+
+---
+
+## Collaboration model
+
+The complete relationship can be visualized as:
+
+```text
+                 Original Repository
+                         │
+                      upstream
+                         │
+                         ↓
+                    Your Local
+                         ↑
+                      origin
+                         │
+                         ↓
+                    Your Fork
+                         │
+                         ↓
+                  Feature Branch
+                         │
+                         ↓
+                    Pull Request
+                         │
+                         ↓
+                 Original Repository
+```
+
+This is one of the most important GitHub collaboration patterns for open-source development.
+
+---
+
+## Contribution is more than code
+
+A professional contribution may involve:
+
+* Understanding the project's existing code.
+* Reading contribution guidelines.
+* Creating a focused branch.
+* Making a small, relevant change.
+* Writing clear commits.
+* Testing the change.
+* Explaining the change in the Pull Request.
+* Responding to review comments.
+* Updating the branch when necessary.
+
+The objective is not simply to make code work.
+
+The contribution must fit the **existing project and its workflow**.
+
+---
+
+## Good contribution practice
+
+A good contribution should generally be:
+
+* Focused.
+* Understandable.
+* Tested.
+* Consistent with the existing project.
+* Easy to review.
+* Limited to the required change.
+
+Avoid mixing unrelated changes into the same Pull Request.
+
+For example, if you are fixing a validation bug, avoid simultaneously redesigning unrelated UI components.
+
+This keeps review and integration much easier.
+
+---
+
+## Forking and Pull Requests
+
+Forking and Pull Requests are closely connected.
+
+The typical open-source contribution path is:
+
+```text
+Fork
+  ↓
+Clone
+  ↓
+Branch
+  ↓
+Change
+  ↓
+Commit
+  ↓
+Push
+  ↓
+Pull Request
+  ↓
+Review
+  ↓
+Merge
+```
+
+The fork provides the workspace.
+
+The branch isolates the work.
+
+The Pull Request provides the contribution mechanism.
+
+---
+
+## What we learned
+
+The important lesson was understanding how Git and GitHub scale from **individual development to collaboration with people whose repositories you do not control**.
+
+```text
+Git
+ ↓
+Local development
+
+GitHub
+ ↓
+Remote collaboration
+
+Fork
+ ↓
+Independent repository copy
+
+Branch
+ ↓
+Isolated work
+
+Pull Request
+ ↓
+Proposed contribution
+
+Review + Merge
+ ↓
+Integration
+```
+
+---
+
+## Useful commands
+
+```bash
+# Clone your fork
+git clone <your-fork-url>
+
+# Inspect remotes
+git remote -v
+
+# Add the original repository
+git remote add upstream <original-repository-url>
+
+# Fetch changes from the original repository
+git fetch upstream
+
+# Create a feature branch
+git switch -c feature-name
+
+# Push your branch to your fork
+git push -u origin feature-name
+```
+
+---
+
+## Practical professional rule
+
+> **When contributing to someone else's repository, keep your work isolated, focused, tested, and easy to review.**
+
+Do not assume that the original project's workflow is the same as yours.
+
+Before contributing, check:
+
+```text
+README
+CONTRIBUTING.md
+Issue / task description
+Branching rules
+Testing requirements
+Pull Request guidelines
+```
+
+Following the project's existing conventions is itself part of being a good contributor.
+
+---
+
+## Final mental model
+
+```text
+Fork
+  → My GitHub copy
+
+Clone
+  → My local copy
+
+Branch
+  → My isolated line of work
+
+Commit
+  → My recorded change
+
+Push
+  → Publish my branch
+
+Pull Request
+  → Propose my contribution
+
+Review
+  → Project maintainers evaluate it
+
+Merge
+  → Contribution becomes part of the original project
+```
+
+**Core lesson:**
+
+> **Forking gives you a safe place to work; branches organize the work; commits record it; Pull Requests communicate it; review and merge turn the contribution into part of the original project.**
+
 ## 🚀 9. Pull Requests ✅
 
 - Create PR
@@ -113,6 +1351,411 @@
 - Merge PR
 - Delete feature branch
 - Keep local repository synchronized
+
+### Footnote — Git Pull Requests
+
+**What is a Pull Request?**
+
+A **Pull Request (PR)** is a request to merge changes from one branch into another branch, usually after the changes have been pushed to a remote repository such as GitHub.
+
+A PR is not a Git command. It is a **collaboration and review mechanism provided by platforms such as GitHub**.
+
+**Mental model:**
+
+> **Pull Request = “I have completed a change on my branch; please review it before we merge it into the target branch.”**
+
+A typical workflow looks like:
+
+```text
+main
+  │
+  └── feature branch
+          │
+          ├── commit
+          ├── commit
+          └── commit
+                │
+                ↓
+             push
+                │
+                ↓
+        Pull Request on GitHub
+                │
+          review / discussion
+                │
+                ↓
+              merge
+                │
+                ↓
+              main
+```
+
+---
+
+## Why use Pull Requests?
+
+Pull Requests provide a controlled way to introduce changes into a shared branch.
+
+They are commonly used to:
+
+* Review code before merging.
+* Discuss implementation decisions.
+* Detect problems before they reach the main branch.
+* Run automated tests and CI checks.
+* Keep feature work separate from stable code.
+* Maintain a record of what changed and why.
+* Allow multiple developers to collaborate safely.
+
+A PR therefore represents more than just code merging.
+
+It is part of a **professional development workflow**.
+
+---
+
+## Pull Request vs Git Merge
+
+`git merge` is a Git operation that combines histories.
+
+A Pull Request is a **workflow around that operation**.
+
+For example:
+
+```text
+Git:
+
+git merge feature
+```
+
+This performs the actual integration locally.
+
+A Pull Request on GitHub allows the integration to happen through a review process:
+
+```text
+Feature branch
+      ↓
+Push to GitHub
+      ↓
+Pull Request
+      ↓
+Review
+      ↓
+Checks
+      ↓
+Approval
+      ↓
+Merge
+```
+
+The PR therefore provides the collaboration layer around Git's branching and merging capabilities.
+
+---
+
+## What we practiced
+
+Using the `git-demo` repository and GitHub, we practiced the basic Pull Request workflow.
+
+The practice included:
+
+* Working on a separate branch.
+* Making commits on that branch.
+* Pushing the branch to GitHub.
+* Creating a Pull Request.
+* Selecting the target branch.
+* Reviewing the proposed changes.
+* Understanding the difference between the source branch and target branch.
+* Merging the Pull Request.
+* Understanding what happens to the branches after merging.
+* Removing or keeping branches according to the workflow.
+
+The goal was to experience a real GitHub collaboration process rather than treating Pull Requests as only a GitHub button.
+
+---
+
+## Source branch and target branch
+
+Every Pull Request has two important sides.
+
+### Source branch
+
+The branch containing the changes being proposed.
+
+Example:
+
+```text
+feature/login
+```
+
+### Target branch
+
+The branch that will receive those changes.
+
+Example:
+
+```text
+main
+```
+
+So a PR can be understood as:
+
+```text
+feature/login
+      │
+      │ Pull Request
+      ↓
+     main
+```
+
+The direction matters.
+
+The feature branch is proposing changes **into** the target branch.
+
+---
+
+## Pull Request review
+
+A reviewer can inspect the proposed changes before they are merged.
+
+They can:
+
+* Read the changed files.
+* Inspect individual lines.
+* Leave comments.
+* Ask for changes.
+* Discuss implementation choices.
+* Approve the Pull Request.
+
+This creates an important separation:
+
+> **Writing code and approving code do not have to be performed by the same person.**
+
+That becomes especially important in team environments.
+
+---
+
+## Pull Request checks
+
+Modern GitHub repositories can connect automated checks to Pull Requests.
+
+For example:
+
+```text
+Pull Request
+     ↓
+CI workflow
+     ↓
+Install dependencies
+     ↓
+Run tests
+     ↓
+Build
+     ↓
+Result
+```
+
+A team can therefore require successful automated checks before allowing a PR to merge.
+
+This connects Pull Requests directly with **CI/CD**.
+
+---
+
+## Pull Request discussion
+
+A Pull Request also provides a permanent place to explain a change.
+
+A useful PR description should normally answer questions such as:
+
+```text
+What changed?
+
+Why was it changed?
+
+How was it implemented?
+
+How was it tested?
+
+Are there any limitations or follow-up tasks?
+```
+
+This makes the PR useful later as part of the project's technical history.
+
+---
+
+## Pull Request conflicts
+
+A Pull Request may show a merge conflict when the source and target branches contain incompatible changes.
+
+The conflict is not a special type of Git problem.
+
+It is the same underlying Git merge problem that can occur locally.
+
+A developer may resolve it locally, commit the resolution, and push the updated branch.
+
+The Pull Request then updates automatically.
+
+Mental model:
+
+```text
+PR conflict
+    ↓
+Git cannot automatically combine changes
+    ↓
+Resolve conflict
+    ↓
+Commit resolution
+    ↓
+Push
+    ↓
+PR updates
+```
+
+---
+
+## Pull Requests and branches
+
+A Pull Request does not replace branches.
+
+Branches provide isolation:
+
+```text
+main
+ │
+ ├── feature-A
+ ├── feature-B
+ └── bugfix-C
+```
+
+Pull Requests provide a controlled mechanism for bringing those changes back into an appropriate target branch.
+
+Therefore:
+
+> **Branch = isolated line of development**
+
+> **Pull Request = proposed integration of that work**
+
+---
+
+## Pull Request and Forks
+
+Pull Requests can also be created from a fork.
+
+A common open-source workflow is:
+
+```text
+Original repository
+       ↓
+      Fork
+       ↓
+Your repository
+       ↓
+Feature branch
+       ↓
+Pull Request
+       ↓
+Original repository
+```
+
+This allows contributors to propose changes to repositories where they do not have direct write access.
+
+This connects the Pull Request concept with the earlier **Forking & Collaboration** section.
+
+---
+
+## What we learned
+
+The most important lesson was that a Pull Request is not simply a request to “pull code.”
+
+It is a structured collaboration workflow that combines:
+
+```text
+Branching
+   +
+Commits
+   +
+Remote repository
+   +
+Code review
+   +
+Automated checks
+   +
+Discussion
+   +
+Merge
+```
+
+This makes Pull Requests one of the central workflows of professional Git-based development.
+
+---
+
+## Useful workflow
+
+A typical feature workflow can be summarized as:
+
+```bash
+git switch -c feature-name
+
+# make changes
+
+git add .
+git commit -m "Implement feature"
+
+git push -u origin feature-name
+```
+
+Then create the Pull Request on GitHub:
+
+```text
+feature-name
+     ↓
+Pull Request
+     ↓
+main
+```
+
+After review and successful checks, the branch can be merged.
+
+---
+
+## Practical professional rule
+
+> **Do not treat a Pull Request as merely a place to click “Merge.” Treat it as a communication, review, testing, and integration point.**
+
+A good PR should make it easy for another developer to understand:
+
+**what changed, why it changed, and whether it is safe to merge.**
+
+---
+
+## Final mental model
+
+```text
+Branch
+  ↓
+Isolate work
+
+Commit
+  ↓
+Record progress
+
+Push
+  ↓
+Publish branch
+
+Pull Request
+  ↓
+Request review + integration
+
+Review / Checks
+  ↓
+Validate the change
+
+Merge
+  ↓
+Integrate into target branch
+```
+
+**Core lesson:**
+
+> **A Pull Request is the professional bridge between individual development work and shared project integration.**
 
 ## 🚀 10. Undo & Modification
 
@@ -148,6 +1791,373 @@
 | --hard        MOVE       CLEAR          RESET/DISCARD
 |
 |-------------------------------------------------------
+
+### Footnote — Git Undo & Modification
+
+**What is Git Undo & Modification?**
+
+Git provides several ways to **correct, discard, reverse, or modify changes** depending on where those changes currently exist.
+
+The important skill is not memorizing undo commands. It is understanding **what you want to undo and where that change currently lives**.
+
+**Mental model:**
+
+> **Before undoing anything, identify whether the change is in the working directory, staging area, local history, or shared history. Then choose the least destructive operation that solves the problem.**
+
+---
+
+## Why is undo and modification important?
+
+Mistakes are normal in real development.
+
+You may:
+
+= Modify the wrong file.
+= Stage something accidentally.
+= Want to remove a file from staging but keep the changes.
+= Make a mistake in the latest commit.
+= Need to reverse an existing commit.
+= Need to move local history backward.
+= Need to recover from an incorrect operation.
+
+Professional Git usage means being able to correct these situations **without unnecessarily losing useful work**.
+
+---
+
+## The Git state model
+
+Think about Git as several layers:
+
+```text
+Working Directory
+       ↓
+Staging Area
+       ↓
+Local Commit History
+       ↓
+Remote Repository
+```
+
+The farther a change has travelled, the more carefully it should generally be modified or undone.
+
+---
+
+## Discard working-directory changes
+
+If a file has been modified but the changes have **not been staged**, Git can restore it to the state of the last commit:
+
+```bash
+git restore <file>
+```
+
+Example:
+
+```bash
+git restore practice.txt
+```
+
+This discards the current uncommitted changes in that file.
+
+Because this operation can permanently remove those working-tree changes, it should only be used when the changes are no longer needed.
+
+---
+
+## Unstage a file
+
+If a file has been staged but should not be included in the next commit:
+
+```bash
+git restore --staged <file>
+```
+
+This removes the file from the staging area but **keeps the changes in the working directory**.
+
+Mental model:
+
+```text
+Staged change
+      ↓
+git restore --staged
+      ↓
+Unstaged change
+```
+
+The work remains; only its staging state changes.
+
+---
+
+## Modify the latest commit
+
+If the latest commit contains a small mistake, it can be modified instead of creating another unnecessary commit.
+
+```bash
+git commit --amend
+```
+
+For example, after adding something that should have been included in the previous commit:
+
+```bash
+git add <file>
+git commit --amend
+```
+
+The commit message can also be changed:
+
+```bash
+git commit --amend -m "Correct commit message"
+```
+
+Amending replaces the previous commit with a new commit.
+
+Therefore, its commit identity changes.
+
+---
+
+## Revert a committed change
+
+If a committed change needs to be undone while preserving the existing history, use:
+
+```bash
+git revert <commit>
+```
+
+Git creates a **new commit** that reverses the effect of the selected commit.
+
+For example:
+
+```text
+A ── B ── C
+```
+
+If `B` is reverted:
+
+```text
+A ── B ── C ── Revert-B
+```
+
+The original commit remains in the history.
+
+This makes `git revert` particularly useful for changes that have already been shared with others.
+
+---
+
+## Reset
+
+`git reset` is used to move the current branch reference backward and can also change the staging and working-tree state depending on the option used.
+
+Common forms are:
+
+```bash
+git reset --soft
+git reset --mixed
+git reset --hard
+```
+
+Conceptually:
+
+```text
+--soft
+→ move HEAD, keep changes staged
+
+--mixed
+→ move HEAD, keep changes unstaged
+
+--hard
+→ move HEAD and discard tracked working-tree/staging changes
+```
+
+`--hard` is therefore particularly dangerous when valuable local changes exist.
+
+---
+
+## Reset vs revert
+
+This distinction is one of the most important parts of Git undo operations.
+
+| Situation                         | Typical operation      |
+| --------------------------------- | ---------------------- |
+| Discard local file changes        | `git restore`          |
+| Unstage a file                    | `git restore --staged` |
+| Correct the latest commit         | `git commit --amend`   |
+| Move local history backward       | `git reset`            |
+| Reverse a committed/shared change | `git revert`           |
+
+The correct command depends on **what state the change is currently in**.
+
+---
+
+## What we practiced
+
+Using the `git-demo` repository, we developed the ability to:
+
+- Understand Git's different change states.
+- Distinguish working-directory changes from staged changes.
+- Correct staging mistakes.
+- Understand how committed changes can be modified or reversed.
+- Distinguish `reset` from `revert`.
+- Recognize destructive operations.
+- Treat Git history as a recovery mechanism.
+- Choose an undo operation based on the actual state of the repository.
+
+The main objective was to understand **why different undo commands exist**, rather than simply memorizing their syntax.
+
+---
+
+## Always inspect before undoing
+
+Before performing an undo operation, first check the repository:
+
+```bash
+git status
+```
+
+When history is relevant:
+
+```bash
+git log --oneline
+```
+
+These commands help answer:
+
+> **Where is my change right now?**
+
+Only after answering that question should you choose the undo operation.
+
+---
+
+## The golden rule of Git undo
+
+> **Never choose an undo command before identifying where the change currently exists.**
+
+Think through the sequence:
+
+```text
+Working directory?
+       ↓
+Staged?
+       ↓
+Committed?
+       ↓
+Already pushed/shared?
+```
+
+Then choose the least destructive operation appropriate to the situation.
+
+---
+
+## Local history vs shared history
+
+Git gives you considerable freedom when working on your own local history.
+
+Once commits have been pushed and other developers may depend on them, history changes become more sensitive.
+
+A practical distinction is:
+
+```text
+Local / unpublished
+→ history can often be rewritten
+
+Shared / published
+→ prefer preserving history when possible
+```
+
+This is why `reset`, `amend`, and other history-changing operations require more care after work has been shared.
+
+---
+
+## Useful commands
+
+```bash
+# Inspect repository state
+git status
+
+# Inspect commit history
+git log --oneline
+
+# Discard working-directory changes
+git restore <file>
+
+# Unstage a file
+git restore --staged <file>
+
+# Modify the latest commit
+git commit --amend
+
+# Move local history backward
+git reset <option>
+
+# Reverse an existing commit
+git revert <commit>
+```
+
+---
+
+## What we learned
+
+The most important lesson was that **Git does not have one universal undo command**.
+
+Different commands solve different problems:
+
+```text
+git restore
+  → discard working-tree changes
+
+git restore --staged
+  → remove changes from staging
+
+git commit --amend
+  → correct the latest commit
+
+git reset
+  → move local history/state
+
+git revert
+  → create a new commit that reverses an existing commit
+```
+
+These operations should not be treated as interchangeable.
+
+---
+
+## Mental model
+
+> **Git undo is really about controlling the state and history of your changes.**
+
+```text
+Working change
+      ↓
+git restore
+      ↓
+Discard
+
+Staged change
+      ↓
+git restore --staged
+      ↓
+Unstage
+
+Latest commit
+      ↓
+git commit --amend
+      ↓
+Correct
+
+Local history
+      ↓
+git reset
+      ↓
+Move/rewrite
+
+Shared commit
+      ↓
+git revert
+      ↓
+Reverse safely
+```
+
+**Practical rule:**
+
+> **Use the least destructive Git operation that solves the problem, and always inspect the repository state before undoing anything.**
 
 ## 🚀 11. Rebase ✅
 
@@ -242,14 +2252,14 @@ We practiced rebase using the `git-demo` repository and created separate commits
 
 The practice included:
 
-⭐ Moving a branch onto a newer base.
-⭐ Observing that rebased commits receive new hashes.
-⭐ Working with rebase conflicts.
-⭐ Continuing a rebase after resolving conflicts.
-⭐ Aborting a rebase safely.
-⭐ Understanding what happens to branch history during a rebase.
-⭐ Using interactive rebase to inspect and reorder local commits.
-⭐ Protecting important syllabus work before history-changing operations.
+- Moving a branch onto a newer base.
+- Observing that rebased commits receive new hashes.
+- Working with rebase conflicts.
+- Continuing a rebase after resolving conflicts.
+- Aborting a rebase safely.
+- Understanding what happens to branch history during a rebase.
+- Using interactive rebase to inspect and reorder local commits.
+- Protecting important syllabus work before history-changing operations.
 
 ---
 
@@ -349,12 +2359,12 @@ git rebase -i HEAD~3
 
 It can be used to:
 
-⭐ Reorder commits
-⭐ Edit commit messages
-⭐ Squash commits
-⭐ Fix up commits
-⭐ Edit commits
-⭐ Remove commits
+- Reorder commits
+- Edit commit messages
+- Squash commits
+- Fix up commits
+- Edit commits
+- Remove commits
 
 Common commands in the interactive rebase editor include:
 
@@ -507,7 +2517,7 @@ We learned to recognize **when rebase is appropriate and what it actually change
 
 ### Footnote — Git Stash
 
------------------------------------------------------
+---
 📌 git stash
 → Temporarily save your tracked, uncommitted changes
 → Working tree becomes clean
@@ -550,14 +2560,14 @@ We learned to recognize **when rebase is appropriate and what it actually change
 → ⚠️ Use carefully
 → Think: “Empty the entire stash stack.”
 
------------------------------------------------------
+---
 
 stash        → save
 list         → see
 apply        → restore + keep
 pop          → restore + remove
 
------------------------------------------------------
+---
 
 **What is `git stash`?**
 `git stash` temporarily saves changes from the working tree and staging area so you can return to a clean working tree without committing unfinished work.

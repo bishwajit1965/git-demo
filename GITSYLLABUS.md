@@ -78,7 +78,7 @@
 - Tracking
 - Branch synchronization
 
-Footnote — GitHub & Remote Repositories
+### Footnote — GitHub & Remote Repositories
 
 What is a remote repository?
 

@@ -42,6 +42,327 @@
 - Tracking branches
 - Feature branches
 
+### Footnote — Git Branching
+
+**What is Git Branching?**
+
+A Git branch is an independent line of development that allows you to work on changes without directly disturbing another line of development.
+
+**Mental model:**
+
+> **Branch = a movable pointer to a commit that represents an independent line of work.**
+
+Instead of making every change directly on `main`, Git allows us to create a separate branch, develop there, and later integrate the work.
+
+---
+
+### Why use branches?
+
+Branches allow developers to:
+
+- develop features independently
+- experiment safely
+- fix bugs without disturbing stable work
+- work on multiple tasks simultaneously
+- prepare changes for review
+- collaborate with other developers
+- keep `main` stable
+
+A professional repository normally does not require every piece of work to happen directly on `main`.
+
+---
+
+### Basic branch workflow
+
+```text
+main
+  │
+  ├── feature/login
+  │
+  ├── feature/profile
+  │
+  └── fix/navbar
+```
+
+Each branch can move forward independently.
+
+For example:
+
+```text
+main:     A ── B
+               \
+feature:         C ── D
+```
+
+The feature branch starts from an existing commit and receives its own commits.
+
+---
+
+### What we practiced
+
+We practiced creating and working with branches using the Git demo repository.
+
+The important operations were:
+
+```bash
+git branch
+git branch <branch-name>
+git switch <branch-name>
+git switch -c <branch-name>
+git checkout <branch-name>
+```
+
+We also examined branch state with:
+
+```bash
+git status
+git log --oneline --graph --all
+```
+
+---
+
+### Create a branch
+
+```bash
+git branch feature-test
+```
+
+This creates the branch but does not switch to it.
+
+To switch:
+
+```bash
+git switch feature-test
+```
+
+Or create and switch in one command:
+
+```bash
+git switch -c feature-test
+```
+
+---
+
+### Branches are pointers, not copies
+
+This is one of the most important concepts.
+
+A branch does **not** mean Git creates a complete duplicate repository.
+
+Conceptually:
+
+```text
+A ── B ── C   ← main
+          \
+           D ── E   ← feature-test
+```
+
+Both branches share the history up to `C`.
+
+The branch names are simply references pointing to commits.
+
+---
+
+### Branches move
+
+When a new commit is created on a branch, that branch pointer moves forward.
+
+Before:
+
+```text
+A ── B ── C
+          ↑
+        main
+```
+
+After a commit:
+
+```text
+A ── B ── C ── D
+               ↑
+             main
+```
+
+The commit remains in Git history while the branch pointer advances.
+
+---
+
+### Switching branches
+
+```bash
+git switch main
+```
+
+moves the working context to `main`.
+
+```bash
+git switch feature-test
+```
+
+moves it to the feature branch.
+
+Git changes the working tree to match the selected branch's snapshot.
+
+---
+
+### Branch vs commit
+
+These are different things:
+
+| Concept      | Meaning                                              |
+| ------------ | ---------------------------------------------------- |
+| Commit       | A recorded snapshot/change in history                |
+| Branch       | A movable reference to a commit                      |
+| Working tree | The files currently checked out                      |
+| HEAD         | The current location/reference Git is operating from |
+
+A branch can move.
+
+A commit normally remains part of history.
+
+---
+
+### Branch vs working tree
+
+Creating a branch does not automatically create a new physical project folder.
+
+Git manages the different versions through commits and the working tree.
+
+For normal single-worktree development:
+
+```text
+Repository
+   │
+   ├── main branch
+   └── feature branch
+```
+
+You switch between them rather than maintaining separate copies manually.
+
+---
+
+### Why branches matter professionally
+
+A common professional workflow is:
+
+```text
+main
+ │
+ └── feature branch
+       │
+       ├── commit
+       ├── commit
+       └── commit
+              │
+              ▼
+          Pull Request
+              │
+              ▼
+             main
+```
+
+This keeps development isolated until the work is ready to integrate.
+
+---
+
+### Useful commands
+
+List branches:
+
+```bash
+git branch
+```
+
+List all local and remote branches:
+
+```bash
+git branch -a
+```
+
+Create a branch:
+
+```bash
+git branch <name>
+```
+
+Create and switch:
+
+```bash
+git switch -c <name>
+```
+
+Switch:
+
+```bash
+git switch <name>
+```
+
+Delete a merged branch:
+
+```bash
+git branch -d <name>
+```
+
+Force-delete a branch when appropriate:
+
+```bash
+git branch -D <name>
+```
+
+Visualize branch history:
+
+```bash
+git log --oneline --graph --all
+```
+
+---
+
+### What we learned
+
+The key lessons are:
+
+1. A branch is a movable reference.
+2. Branches allow independent development.
+3. Branches share history until they diverge.
+4. Creating a branch does not duplicate the repository.
+5. Commits belong to history; branch names point to commits.
+6. `HEAD` identifies the current working position.
+7. Branches provide isolation for features, fixes, and experiments.
+8. Branches are fundamental to professional Git collaboration.
+
+---
+
+### Practical professional rule
+
+> **Do development on a branch; keep the stable branch stable.**
+
+A branch should represent a meaningful line of work—not a random collection of unrelated changes.
+
+---
+
+### Final mental model
+
+Think of Git history as a road:
+
+```text
+             ┌── C ── D ── E   ← feature
+             │
+A ── B ──────┤
+             │
+             └── F ── G       ← main
+```
+
+The branches are simply different paths through the same history.
+
+**Branching creates the independent line of work.
+Merging will later bring compatible lines of work back together.**
+
+---
+
+### Core lesson
+
+> **Branching gives developers a safe place to work independently without disturbing the stable line of development.**
+
 ## 🚀 4. Merge ✅
 
 - Fast-forward merge
@@ -53,6 +374,526 @@
 - Abort merge
 - Merge history
 
+### Footnote — Git Merge
+
+**What is Git Merge?**
+
+`git merge` combines the history and changes of one branch into another branch.
+
+**Mental model:**
+
+> **Merge = bring the work from one branch into the current branch and combine the histories.**
+
+Branching gives us separate lines of development. **Merging brings those lines back together.**
+
+---
+
+### Why use Git Merge?
+
+Merge is used when work completed on one branch needs to become part of another branch.
+
+Typical example:
+
+```text
+main
+  │
+  ├── feature branch
+  │      │
+  │      ├── commit
+  │      └── commit
+  │
+  └── stable work
+```
+
+When the feature is ready:
+
+```text
+feature branch
+      │
+      ▼
+    merge
+      │
+      ▼
+     main
+```
+
+The feature's changes become part of `main`.
+
+---
+
+### The most important rule
+
+Git merges the specified branch **into the current branch**.
+
+For example:
+
+```bash
+git switch main
+git merge feature-login
+```
+
+means:
+
+> Take `feature-login` and merge it **into `main`**.
+
+The order matters.
+
+If you are currently on `feature-login` and run:
+
+```bash
+git merge main
+```
+
+you are doing the opposite:
+
+> Take `main` and merge it **into `feature-login`**.
+
+---
+
+### Basic Merge Workflow
+
+A normal feature workflow looks like this:
+
+```text
+1. Create feature branch
+        ↓
+2. Develop
+        ↓
+3. Commit changes
+        ↓
+4. Switch to target branch
+        ↓
+5. Merge feature branch
+        ↓
+6. Test
+        ↓
+7. Push / integrate
+```
+
+Example:
+
+```bash
+git switch feature-login
+```
+
+Make changes and commit:
+
+```bash
+git add .
+git commit -m "Add login feature"
+```
+
+Switch to the target branch:
+
+```bash
+git switch main
+```
+
+Merge:
+
+```bash
+git merge feature-login
+```
+
+---
+
+### What happens during a merge?
+
+Suppose history starts like this:
+
+```text
+A ── B ── C        ← main
+          \
+           D ── E  ← feature
+```
+
+The feature branch contains commits `D` and `E`.
+
+After merging:
+
+```text
+A ── B ── C ── M   ← main
+          \     /
+           D ── E
+```
+
+`M` is a **merge commit**.
+
+It records that two development histories were brought together.
+
+---
+
+### Fast-Forward Merge
+
+Not every merge creates a merge commit.
+
+Suppose:
+
+```text
+A ── B ── C        ← main
+          \
+           D ── E  ← feature
+```
+
+and `main` has not moved since the feature branch was created.
+
+Git can simply move `main` forward:
+
+```text
+A ── B ── C ── D ── E
+                    ↑
+                  main
+```
+
+This is called a **fast-forward merge**.
+
+There is no separate merge commit because Git does not need to combine divergent histories.
+
+---
+
+### Three Important Merge Situations
+
+#### 1. Fast-forward
+
+```text
+main:    A ── B
+               \
+feature:         C ── D
+```
+
+If `main` has not diverged:
+
+```text
+A ── B ── C ── D
+```
+
+Simple pointer movement.
+
+---
+
+#### 2. True merge
+
+If both branches have developed independently:
+
+```text
+             C ── D   ← feature
+            /
+A ── B
+            \
+             E ── F   ← main
+```
+
+Git needs to combine the two histories:
+
+```text
+             C ── D
+            /     \
+A ── B ─────────── M   ← main
+            \     /
+             E ── F
+```
+
+The result contains a merge commit.
+
+---
+
+#### 3. Merge conflict
+
+Sometimes both branches modify the same part of a file differently.
+
+Example:
+
+```text
+main:
+const message = "Hello";
+
+feature:
+const message = "Welcome";
+```
+
+Git cannot safely decide which version should win.
+
+It reports a conflict.
+
+---
+
+### Handling a Merge Conflict
+
+First inspect:
+
+```bash
+git status
+```
+
+Git identifies the conflicted files.
+
+The file may contain markers such as:
+
+```text
+<<<<<<< HEAD
+const message = "Hello";
+=======
+const message = "Welcome";
+>>>>>>> feature
+```
+
+You manually decide the correct final content.
+
+Then:
+
+```bash
+git add <file>
+```
+
+After resolving all conflicts:
+
+```bash
+git commit
+```
+
+or, depending on the merge state, Git may provide the merge commit message automatically.
+
+---
+
+### Aborting a Merge
+
+If the merge becomes something you do not want to complete:
+
+```bash
+git merge --abort
+```
+
+This attempts to return the repository to the state before the merge started.
+
+**Practical rule:**
+
+> When confused during a conflict, stop and inspect before changing more files.
+
+Use:
+
+```bash
+git status
+```
+
+first.
+
+---
+
+### What We Practiced
+
+During the Merge stage, the important practical ideas were:
+
+* branches contain independent lines of development
+* one branch can be merged into another
+* the current branch is the merge target
+* fast-forward merges
+* divergent histories
+* merge commits
+* merge conflicts
+* resolving conflicts
+* checking repository state
+* aborting an unwanted merge
+
+The important part was not memorizing:
+
+```bash
+git merge
+```
+
+It was understanding **what Git is actually combining**.
+
+---
+
+### Merge vs Branch
+
+These concepts are complementary:
+
+| Concept      | Purpose                                    |
+| ------------ | ------------------------------------------ |
+| Branch       | Creates an independent line of development |
+| Merge        | Combines development lines                 |
+| Commit       | Records a change                           |
+| HEAD         | Identifies the current position            |
+| Merge commit | Records a non-fast-forward merge           |
+
+Mental model:
+
+```text
+Branching → separate
+Development → work
+Merge → combine
+```
+
+---
+
+### Merge vs Rebase
+
+Both can integrate branch work, but they work differently.
+
+**Merge:**
+
+```text
+A ── B ── C ── M
+      \       /
+       D ── E
+```
+
+Preserves the divergent history and creates a merge commit when necessary.
+
+**Rebase:**
+
+```text
+A ── B ── C ── D' ── E'
+```
+
+Replays the branch commits onto another base and creates new commit identities.
+
+Neither operation is universally "better."
+
+The appropriate choice depends on the project's workflow and history policy.
+
+---
+
+### Useful Commands
+
+Check current branch:
+
+```bash
+git branch
+```
+
+Check repository state:
+
+```bash
+git status
+```
+
+Switch to target branch:
+
+```bash
+git switch main
+```
+
+Merge:
+
+```bash
+git merge <branch>
+```
+
+View history:
+
+```bash
+git log --oneline --graph --all
+```
+
+Abort an in-progress merge:
+
+```bash
+git merge --abort
+```
+
+Continue after resolving conflicts:
+
+```bash
+git add <resolved-file>
+git commit
+```
+
+---
+
+### Professional Merge Workflow
+
+A clean professional workflow commonly looks like:
+
+```text
+feature branch
+      │
+      ├── commit
+      ├── commit
+      │
+      ▼
+push
+      │
+      ▼
+Pull Request
+      │
+      ▼
+review + CI
+      │
+      ▼
+merge
+      │
+      ▼
+main
+```
+
+In a team environment, the actual merge may happen through GitHub's Pull Request interface rather than directly through the local command line.
+
+The underlying Git concept remains the same:
+
+> **Combine one line of development with another.**
+
+---
+
+### What We Learned
+
+1. Merge combines branch histories.
+2. The current branch is the merge target.
+3. `git merge <branch>` brings that branch into the current branch.
+4. Fast-forward merges simply move the target branch forward.
+5. Divergent histories may require a merge commit.
+6. Conflicts happen when Git cannot safely combine changes.
+7. Conflicts are resolved by the developer, not blindly by Git.
+8. `git merge --abort` safely exits an unwanted merge.
+9. Merge preserves branch history rather than rewriting it.
+10. Merge and rebase solve related integration problems differently.
+
+---
+
+### Practical Professional Rule
+
+> **Always know which branch you are currently on before running `git merge`.**
+
+And before a merge:
+
+```bash
+git status
+git branch
+```
+
+Know:
+
+**Where am I? → What am I merging? → Where will it go?**
+
+That simple habit prevents many Git mistakes.
+
+---
+
+### Final Mental Model
+
+Think of two roads:
+
+```text
+                 ┌── C ── D ──┐
+                 │             │
+A ── B ─────────┤             ├── M
+                 │             │
+                 └── E ── F ──┘
+```
+
+The branches represent separate development paths.
+
+The merge commit `M` records where those paths were brought together.
+
+**Branching separates work.
+Merging combines work.**
+
+---
+
+### Core Lesson
+
+> **Git Merge is the mechanism that brings independent development back together while preserving the history of how that work evolved.**
+
 ## 🚀 5. Git Workflow ✅
 
 - Working with branches
@@ -61,6 +902,546 @@
 - Best practices
 - Clean commits
 - Team conventions
+
+### Footnote — Git Workflow
+
+**What is a Git workflow?**
+
+A **Git workflow** is the practical sequence developers follow to take a change from an idea or task to a recorded, reviewable, and integrated change in a Git repository.
+
+It connects the individual Git operations we learned earlier into a **repeatable development process**.
+
+**Mental model:**
+
+> **Git workflow = create isolated work → make changes → review changes → stage → commit → synchronize → integrate.**
+
+A simple workflow looks like:
+
+```text id="8qv4xm"
+Task / Requirement
+       ↓
+Create or switch to branch
+       ↓
+Make changes
+       ↓
+Inspect / test
+       ↓
+Stage changes
+       ↓
+Commit
+       ↓
+Push / synchronize
+       ↓
+Review
+       ↓
+Merge
+```
+
+---
+
+## Why use a Git workflow?
+
+Knowing individual Git commands is not enough.
+
+A developer needs to know **when and why to use them together**.
+
+A consistent workflow helps to:
+
+- Keep work organized.
+- Isolate features and fixes.
+- Create meaningful commits.
+- Reduce accidental changes.
+- Make collaboration easier.
+- Simplify code review.
+- Keep the main branch stable.
+- Make problems easier to diagnose and recover from.
+
+The goal is not to follow a ritual mechanically.
+
+The goal is to create a **safe and repeatable development process**.
+
+---
+
+## Start with a clean repository
+
+Before starting new work, inspect the current state:
+
+```bash id="g1x5sp"
+git status
+```
+
+Ideally:
+
+```text id="v7m2qd"
+On branch main
+nothing to commit, working tree clean
+```
+
+This gives you a known starting point.
+
+Mental model:
+
+> **Always know where you are before you start changing things.**
+
+---
+
+## Create a branch for the work
+
+For a new feature or bug fix:
+
+```bash id="f4n8wk"
+git switch -c feature-name
+```
+
+For example:
+
+```bash id="q6y2rm"
+git switch -c add-search
+```
+
+This creates a separate line of development.
+
+```text id="b3k7px"
+main
+ │
+ └── add-search
+```
+
+The main branch remains untouched while the feature is being developed.
+
+---
+
+## Make the changes
+
+Work normally:
+
+```text id="m9w2cz"
+Edit
+ ↓
+Run
+ ↓
+Test
+ ↓
+Fix
+ ↓
+Repeat
+```
+
+Git does not replace normal development.
+
+It records the evolution of the work.
+
+During development, check the repository regularly:
+
+```bash id="r8p3xq"
+git status
+```
+
+and inspect changes when necessary:
+
+```bash id="t2k6vz"
+git diff
+```
+
+---
+
+## Review before staging
+
+Before creating a commit, inspect what actually changed.
+
+```bash id="j5v9mc"
+git diff
+```
+
+This helps catch:
+
+- Accidental edits.
+- Debug code.
+- Unwanted files.
+- Incorrect changes.
+- Formatting mistakes.
+- Changes unrelated to the current task.
+
+The important principle is:
+
+> **Do not commit blindly. Review what you are about to record.**
+
+---
+
+## Stage the intended changes
+
+Once the changes are correct:
+
+```bash id="e7c4bn"
+git add <file>
+```
+
+or, when appropriate:
+
+```bash id="z2w8kf"
+git add .
+```
+
+Staging creates the exact snapshot that will become the next commit.
+
+Mental model:
+
+```text id="c9x4ra"
+Working Directory
+       ↓
+      git add
+       ↓
+Staging Area
+```
+
+---
+
+## Commit the change
+
+Create a meaningful commit:
+
+```bash id="h6q1vt"
+git commit -m "Implement search feature"
+```
+
+A commit should describe a logical change rather than simply describing an editing session.
+
+Good:
+
+```text
+Implement search feature
+Fix authentication validation
+Add user profile endpoint
+```
+
+Less useful:
+
+```text
+changes
+update
+work
+final
+test
+```
+
+The commit message becomes part of the project's history.
+
+---
+
+## Keep commits focused
+
+A good commit generally represents one logical change.
+
+For example:
+
+```text id="n7m3bx"
+Commit 1
+Add search API
+
+Commit 2
+Add search UI
+
+Commit 3
+Add search tests
+```
+
+This makes history easier to understand and allows specific changes to be inspected, reverted, or cherry-picked later.
+
+Avoid creating one enormous commit containing unrelated work whenever practical.
+
+---
+
+## Synchronize with the remote
+
+If the project uses a remote repository such as GitHub, publish the branch:
+
+```bash id="w4p8kd"
+git push -u origin feature-name
+```
+
+Later updates can usually be pushed with:
+
+```bash id="s9c2hx"
+git push
+```
+
+The remote now contains the branch and its commits.
+
+```text id="k8m2rv"
+Local feature branch
+        │
+       push
+        ↓
+GitHub feature branch
+```
+
+---
+
+## Review and integration
+
+Once the feature is ready, the branch can be reviewed before being integrated into the main development line.
+
+In a GitHub-based workflow, this is commonly done through a Pull Request:
+
+```text id="p4q7ws"
+feature branch
+      ↓
+Pull Request
+      ↓
+Review
+      ↓
+Tests / CI
+      ↓
+Merge
+      ↓
+main
+```
+
+This connects the local Git workflow with the GitHub collaboration workflow.
+
+---
+
+## Keep the main branch stable
+
+The main branch generally represents the project's primary shared state.
+
+A practical workflow therefore avoids doing experimental work directly on `main`.
+
+Instead:
+
+```text id="c7m2qx"
+main
+ ├── feature-A
+ ├── feature-B
+ └── bugfix-C
+```
+
+Each change can be developed and reviewed independently.
+
+This reduces the chance that unfinished work will destabilize the main branch.
+
+---
+
+## Working with existing changes
+
+Real development does not always happen in a perfectly clean environment.
+
+You may discover:
+
+- Unfinished local work.
+- Another branch has moved forward.
+- Your branch has conflicts.
+- You need to temporarily switch tasks.
+- You need to update your branch before continuing.
+
+This is where previously learned Git tools become part of the workflow:
+
+```text id="x8n4pm"
+stash
+merge
+rebase
+cherry-pick
+restore
+revert
+reset
+```
+
+The workflow therefore depends on understanding **why each operation exists**, not simply memorizing commands.
+
+---
+
+## What we practiced
+
+Using the `git-demo` repository, we developed the practical workflow connecting the fundamental Git concepts.
+
+The practice included:
+
+- Checking repository status before working.
+- Creating and switching branches.
+- Making changes.
+- Inspecting differences.
+- Staging selected changes.
+- Creating meaningful commits.
+- Working with local and remote branches.
+- Pushing work to GitHub.
+- Merging branches.
+- Handling conflicts.
+- Understanding how individual Git commands fit together into a development process.
+
+The important outcome was moving from **knowing Git commands** to **using Git as part of development**.
+
+---
+
+## A practical daily workflow
+
+A simple professional workflow can often look like:
+
+```bash id="u2m5kr"
+git status
+
+git switch -c feature-name
+
+# make changes
+
+git diff
+
+git add <files>
+
+git commit -m "Describe the logical change"
+
+git push -u origin feature-name
+```
+
+Then:
+
+```text id="q3f7vz"
+Pull Request
+     ↓
+Review
+     ↓
+CI checks
+     ↓
+Merge
+```
+
+The exact workflow can vary between teams.
+
+---
+
+## Git workflow is not a fixed ritual
+
+Different teams may use different approaches.
+
+For example:
+
+```text
+Feature branches
+GitHub Flow
+GitLab Flow
+Trunk-based development
+Release branches
+```
+
+The important principle is not to memorize a particular named workflow.
+
+It is to understand the underlying ideas:
+
+```text
+Isolation
+  ↓
+Controlled changes
+  ↓
+Meaningful history
+  ↓
+Review
+  ↓
+Integration
+  ↓
+Stable shared code
+```
+
+---
+
+### What we learned about workflow
+
+The most important lesson was that Git becomes much more useful when individual commands are connected into a **development workflow**.
+
+Instead of thinking:
+
+```text
+git add
+git commit
+git push
+git merge
+```
+
+as unrelated commands, think:
+
+```text
+Develop
+   ↓
+Inspect
+   ↓
+Stage
+   ↓
+Commit
+   ↓
+Publish
+   ↓
+Review
+   ↓
+Integrate
+```
+
+Each operation has a purpose within the larger process.
+
+---
+
+## Practical professional rule
+
+> **Keep work isolated, commits meaningful, changes reviewable, and the shared branch stable.**
+
+Before committing or integrating anything, ask:
+
+```text id="r6x9qm"
+What am I changing?
+
+Why am I changing it?
+
+Have I reviewed it?
+
+Is the commit focused?
+
+Has it been tested?
+
+Is it ready to share?
+```
+
+This mindset is more valuable than memorizing a long list of Git commands.
+
+---
+
+## Final mental model
+
+```text id="k4p8ds"
+Task
+ ↓
+Branch
+ ↓
+Develop
+ ↓
+Inspect
+ ↓
+Stage
+ ↓
+Commit
+ ↓
+Push
+ ↓
+Pull Request / Review
+ ↓
+Merge
+ ↓
+Stable main
+```
+
+And when something goes wrong:
+
+```text id="m8q2wc"
+Problem
+  ↓
+Inspect state
+  ↓
+Choose the appropriate Git operation
+  ↓
+Recover
+  ↓
+Continue development
+```
+
+**Core lesson:**
+
+> **Git workflow is the discipline of turning individual code changes into controlled, understandable, reviewable, and safely integrated project history.**
 
 ## 🚀 6.GitHub & Remote Repositories ✅
 
@@ -77,6 +1458,8 @@
 - Remote branches
 - Tracking
 - Branch synchronization
+
+---
 
 ### Footnote — GitHub & Remote Repositories
 
@@ -386,28 +1769,37 @@ The repository therefore becomes more than storage.
 It can become part of a developer's professional evidence.
 
 Useful commands
-# Inspect remotes
+
+### Inspect remotes
+
 git remote -v
 
-# Add a remote
+### Add a remote
+
 git remote add origin <repository-url>
 
-# Change a remote URL
+### Change a remote URL
+
 git remote set-url origin <repository-url>
 
-# Push a branch
+### Push a branch
+
 git push -u origin main
 
-# Push later changes
+### Push later changes
+
 git push
 
-# Fetch remote information
+### Fetch remote information
+
 git fetch origin
 
-# Pull and integrate remote changes
+### Pull and integrate remote changes
+
 git pull origin main
 
-# Inspect all branches
+### Inspect all branches
+
 git branch -a
 What we learned
 

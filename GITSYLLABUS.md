@@ -2,21 +2,21 @@
 
 ## 🚀 1. Git Fundamentals ✅
 
-- Git introduction
-- Git vs GitHub
-- Installation
-- Configuration
-- Get Started
-- Repository
-- Working tree
-- Staging area
-- Commits
-- New files
-- Staging
-- Commit
-- Status
-- Diff
-- Help
+- 💎 Git introduction
+- 💎 Git vs GitHub
+- 💎 Installation
+- 💎 Configuration
+- 💎 Get Started
+- 💎 Repository
+- 💎 Working tree
+- 💎 Staging area
+- 💎 Commits
+- 💎 New files
+- 💎 Staging
+- 💎 Commit
+- 💎 Status
+- 💎 Diff
+- 💎 Help
 
 ## 🚀 2. Git History ✅
 
@@ -163,6 +163,336 @@
 - Reordering/editing commits
 - When to use/not use rebase
 
+### Footnote — Git Rebase
+
+**What is `git rebase`?**
+`git rebase` moves or **replays a series of commits onto a different base commit**.
+
+Its primary purpose is to create a cleaner, more linear project history by changing where a branch's commits are based.
+
+**Mental model:**
+
+> **Rebase = take my commits, temporarily lift them away, move the branch to a new base, then replay those commits on top.**
+
+Suppose the history is:
+
+```text id="h7k3vp"
+A ── B ── C        main
+      \
+       D ── E      feature
+```
+
+If `main` has moved forward and we rebase `feature` onto `main`:
+
+```text id="m4q8zn"
+A ── B ── C ── D' ── E'    feature
+```
+
+The changes from `D` and `E` are replayed after `C`.
+
+The resulting commits `D'` and `E'` are **new commits with new commit identities**.
+
+---
+
+## Why use rebase?
+
+Rebase can be useful when:
+
+* Updating a feature branch with the latest `main`.
+* Keeping project history linear.
+* Preparing a branch before opening a pull request.
+* Cleaning up local commits before sharing them.
+* Avoiding unnecessary merge commits in appropriate workflows.
+
+Rebase is primarily a **history-rewriting operation**.
+
+---
+
+## Rebase vs merge
+
+Both can integrate changes, but they do it differently.
+
+### Merge
+
+```text id="n2v7cx"
+A ── B ── C ───── M
+      \           /
+       D ── E ───
+```
+
+Merge combines the histories and may create a merge commit.
+
+### Rebase
+
+```text id="q8m4wp"
+A ── B ── C ── D' ── E'
+```
+
+Rebase replays the feature commits on the new base and produces a linear history.
+
+Neither operation is universally "better."
+
+The correct choice depends on the team's workflow and whether rewriting history is appropriate.
+
+---
+
+## What we practiced
+
+We practiced rebase using the `git-demo` repository and created separate commits on branches so that the effect of rebasing could be observed.
+
+The practice included:
+
+⭐ Moving a branch onto a newer base.
+⭐ Observing that rebased commits receive new hashes.
+⭐ Working with rebase conflicts.
+⭐ Continuing a rebase after resolving conflicts.
+⭐ Aborting a rebase safely.
+⭐ Understanding what happens to branch history during a rebase.
+⭐ Using interactive rebase to inspect and reorder local commits.
+⭐ Protecting important syllabus work before history-changing operations.
+
+---
+
+## Basic rebase workflow
+
+First inspect the branches:
+
+```bash id="r6k2mv"
+git log --oneline --graph --all
+```
+
+Switch to the branch that should be rebased:
+
+```bash id="x9p4wc"
+git switch feature
+```
+
+Then rebase it onto `main`:
+
+```bash id="v3m8qn"
+git rebase main
+```
+
+Git replays the feature commits on top of the current `main`.
+
+---
+
+## Rebase conflicts
+
+A rebase can stop when Git cannot automatically apply a commit.
+
+Check the repository state:
+
+```bash id="c5r7yk"
+git status
+```
+
+Resolve the conflicted files manually.
+
+Then stage the resolved files:
+
+```bash id="p8m2vd"
+git add <resolved-file>
+```
+
+Continue the rebase:
+
+```bash id="w4k9zs"
+git rebase --continue
+```
+
+Git then continues replaying the remaining commits.
+
+---
+
+## Aborting a rebase
+
+If the rebase becomes undesirable or confusing, it can be cancelled:
+
+```bash id="f7n3qx"
+git rebase --abort
+```
+
+This is an important recovery mechanism.
+
+It tells Git:
+
+> Stop the current rebase operation and return the branch to the state it was in before the rebase started.
+
+---
+
+## Skipping a commit
+
+In certain situations, a particular commit may no longer be needed during a rebase.
+
+Git provides:
+
+```bash id="k2v8mp"
+git rebase --skip
+```
+
+This skips the commit currently being replayed.
+
+This should only be used when you understand why that commit should not be replayed.
+
+---
+
+## Interactive rebase
+
+Interactive rebase provides more control over local commit history.
+
+Example:
+
+```bash id="n6q3wr"
+git rebase -i HEAD~3
+```
+
+It can be used to:
+
+⭐ Reorder commits
+⭐ Edit commit messages
+⭐ Squash commits
+⭐ Fix up commits
+⭐ Edit commits
+⭐ Remove commits
+
+Common commands in the interactive rebase editor include:
+
+```text id="b5m9xc"
+pick    → keep the commit
+reword  → change the commit message
+edit    → stop and modify the commit
+squash  → combine with the previous commit
+fixup   → combine without keeping the commit message
+drop    → remove the commit
+```
+
+Interactive rebase is especially useful for cleaning up **local, unpublished history**.
+
+---
+
+## Why rebased commits get new hashes
+
+A Git commit is identified partly by the data describing its parent commit.
+
+When a commit is replayed onto a different parent:
+
+```text id="t7q4mz"
+Original:
+
+B → D
+
+Rebased:
+
+C → D'
+```
+
+The content may represent the same logical change, but its parent relationship has changed.
+
+Therefore Git creates a new commit identity.
+
+This is why:
+
+> **Rebase rewrites history.**
+
+---
+
+## The golden rule of rebase
+
+Be careful when rebasing commits that other people already depend on.
+
+If a shared branch contains:
+
+```text id="j4p8vx"
+A ── B ── C
+```
+
+and those commits are already used by other developers, rewriting them can cause synchronization problems.
+
+A practical rule is:
+
+> **Rebase your own local/unpublished work freely; be cautious about rebasing shared/public history.**
+
+The exact policy depends on the team's workflow.
+
+---
+
+## Rebase and force push
+
+After rebasing a branch that has already been pushed, its history may no longer match the remote branch.
+
+A normal push may be rejected.
+
+In appropriate situations, a safer force-push form is:
+
+```bash id="z8m3qk"
+git push --force-with-lease
+```
+
+`--force-with-lease` provides an additional safety check compared with a blind:
+
+```bash
+git push --force
+```
+
+It helps prevent overwriting remote changes that you did not know about.
+
+Force-pushing should still be used carefully on shared branches.
+
+---
+
+## Rebase and stash
+
+Git may require a clean working tree before starting certain rebase operations.
+
+If unfinished changes are present, you may need to:
+
+```bash id="e5r7nw"
+git stash
+```
+
+perform the rebase, and then restore the work.
+
+This is one reason understanding stash and rebase together is useful.
+
+---
+
+## Useful commands
+
+```bash id="s4k8xp"
+# View history
+git log --oneline --graph --all
+
+# Rebase current branch onto main
+git rebase main
+
+# Continue after resolving a conflict
+git rebase --continue
+
+# Skip the current commit
+git rebase --skip
+
+# Abort the rebase
+git rebase --abort
+
+# Start interactive rebase
+git rebase -i HEAD~3
+
+# Safely force-push rewritten history
+git push --force-with-lease
+```
+
+---
+
+## What we learned
+
+The most important lesson was not the command itself.
+
+We learned to recognize **when rebase is appropriate and what it actually changes**.
+
+```text
+```
+
 ## 🚀 12. Stash ✅
 
 - Why stash
@@ -175,7 +505,7 @@
 - Stashing specific work
 - Practical use cases
 
-### FOOT NOTE ON stash
+### Footnote — Git Stash
 
 -----------------------------------------------------
 📌 git stash
@@ -228,6 +558,280 @@ apply        → restore + keep
 pop          → restore + remove
 
 -----------------------------------------------------
+
+**What is `git stash`?**
+`git stash` temporarily saves changes from the working tree and staging area so you can return to a clean working tree without committing unfinished work.
+
+It is useful when you are in the middle of one task but need to temporarily switch context—for example, to change branches, handle an urgent fix, or investigate another problem.
+
+**Mental model:**
+
+> **Stash = temporary storage for unfinished work.**
+
+```text id="n4k8wp"
+Working on Task A
+      ↓
+Unfinished changes
+      ↓
+git stash
+      ↓
+Clean working tree
+      ↓
+Work on Task B
+      ↓
+Return to Task A
+      ↓
+Restore stashed changes
+```
+
+### Why use stash?
+
+A developer may have local changes that are not ready to become a commit.
+
+For example:
+
+```text id="q7m3vx"
+Feature work
+    ↓
+50% complete
+    ↓
+Urgent bug needs investigation
+    ↓
+Cannot commit unfinished feature
+    ↓
+git stash
+    ↓
+Clean repository
+```
+
+Stash allows the unfinished work to be temporarily put aside.
+
+### What we practiced
+
+We practiced the complete basic stash workflow:
+
+```bash id="k5r9tc"
+git stash
+```
+
+This temporarily stored the current working changes and returned the working tree to a clean state.
+
+We then inspected available stashes:
+
+```bash id="m2x7qp"
+git stash list
+```
+
+This showed the saved stash entries.
+
+A stash is identified using a reference such as:
+
+```text id="b8v4zn"
+stash@{0}
+```
+
+We also inspected the contents of a stash:
+
+```bash id="c6w9ks"
+git stash show --stat stash@{0}
+```
+
+and examined the actual patch:
+
+```bash id="r3n5mv"
+git stash show -p stash@{0}
+```
+
+This demonstrated that a stash is not just an unexplained "save"; it contains actual changes that can be inspected.
+
+### Applying a stash
+
+To restore a stash while **keeping the stash entry**:
+
+```bash id="x9q4wd"
+git stash apply stash@{0}
+```
+
+This is useful when you want to restore the work but retain the stash as a safety copy.
+
+### Popping a stash
+
+To restore the stash and remove it from the stash list:
+
+```bash id="v6m2kp"
+git stash pop
+```
+
+Conceptually:
+
+```text id="r8n3yc"
+apply → restore changes + keep stash
+
+pop   → restore changes + remove stash
+```
+
+### Dropping a stash
+
+When a stash is no longer needed:
+
+```bash id="t4k7zs"
+git stash drop stash@{0}
+```
+
+This removes that stash entry.
+
+To remove all stashes:
+
+```bash id="w5p8mq"
+git stash clear
+```
+
+Use this carefully because removing stash entries can make previously saved work difficult to recover.
+
+### Important distinction: stash is not a commit
+
+A stash is useful temporary storage, but it should not be treated as permanent project history.
+
+```text id="j7c2rx"
+Commit
+    ↓
+Permanent project history
+
+Stash
+    ↓
+Temporary unfinished work
+```
+
+If the work is important and complete, commit it.
+
+### Stash and untracked files
+
+By default, `git stash` primarily saves tracked modifications.
+
+To also stash untracked files:
+
+```bash id="e8m4qn"
+git stash -u
+```
+
+To include ignored files as well:
+
+```bash id="s3v7kp"
+git stash -a
+```
+
+Be deliberate with these options because they save more than a normal stash.
+
+### Named stash messages
+
+A descriptive message can make stash entries easier to understand:
+
+```bash id="y6n2wc"
+git stash push -m "unfinished authentication work"
+```
+
+Then:
+
+```bash id="p4r8zm"
+git stash list
+```
+
+might show a meaningful description instead of an anonymous stash.
+
+### Stash conflicts
+
+Applying a stash can sometimes produce conflicts if the current working tree has changed significantly since the stash was created.
+
+The normal approach is:
+
+```bash id="u7k3qx"
+git status
+```
+
+Resolve the conflicts, stage the resolved files, and continue working normally.
+
+Unlike a commit, a stash does not automatically create a new commit when it is applied.
+
+### What we learned about real-world stash management
+
+During the Git syllabus work, multiple stash entries accumulated.
+
+Instead of blindly popping them, we inspected them individually:
+
+```bash id="a2m9vf"
+git stash list
+git stash show --stat stash@{0}
+git stash show -p stash@{0}
+```
+
+We identified which stash contained important syllabus progress and which contained obsolete or unrelated practice changes.
+
+The important lesson was:
+
+> **Inspect a stash before applying or deleting it when its contents matter.**
+
+We deliberately used:
+
+```bash id="h5q8wd"
+git stash apply stash@{0}
+```
+
+instead of immediately using `pop`, because `apply` preserves the stash as a safety copy.
+
+### Useful commands
+
+```bash id="d8m4xp"
+# Save current changes
+git stash
+
+# Save including untracked files
+git stash -u
+
+# List stashes
+git stash list
+
+# Inspect stash summary
+git stash show --stat stash@{0}
+
+# Inspect stash changes
+git stash show -p stash@{0}
+
+# Apply without deleting the stash
+git stash apply stash@{0}
+
+# Apply and remove the stash
+git stash pop
+
+# Delete one stash
+git stash drop stash@{0}
+
+# Delete all stashes
+git stash clear
+```
+
+### Practical rule
+
+Use stash when work is **temporary and unfinished**.
+
+If the work represents a meaningful completed change, **commit it instead**.
+
+### Mental model
+
+> **Stash = temporarily put unfinished work aside so the working tree can be used for something else.**
+
+```text id="z9c5vk"
+Unfinished work
+      ↓
+    STASH
+      ↓
+Clean working tree
+      ↓
+Do other work
+      ↓
+Restore stash
+      ↓
+Continue unfinished work
+```
 
 ## 🚀 13. Cherry-pick & Patch
 

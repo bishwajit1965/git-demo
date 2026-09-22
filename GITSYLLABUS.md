@@ -175,6 +175,8 @@
 - Stashing specific work
 - Practical use cases
 
+## FOOT NOTE ON stash
+
 -----------------------------------------------------
 📌 git stash
 → Temporarily save your tracked, uncommitted changes
@@ -274,7 +276,155 @@ pop          → restore + remove
 - Basic usage
 - When you don't need it
 
-## 18. Signing
+### Footnote — Git LFS
+
+**What is Git LFS?**
+Git LFS (Large File Storage) is a Git extension designed to handle large binary files more efficiently than storing their full contents directly in the normal Git repository.
+
+Typical examples include:
+
+- Large images
+- Videos
+- Audio files
+- ZIP/archives
+- Design files
+- Other large binary assets
+
+**Why use Git LFS?**
+Normal Git stores the contents of every committed version of a file in the repository's history. Large binary files can therefore make a repository unnecessarily large and slow.
+
+Git LFS changes this model:
+
+```text
+Normal Git
+Large file
+    ↓
+Git repository stores the file contents
+    ↓
+Repository history becomes large
+
+
+Git LFS
+Large file
+    ↓
+Git stores a small pointer
+    ↓
+Actual file → LFS storage
+```
+
+**The LFS pointer**
+When a file is tracked by LFS, Git does not store the actual binary contents in the normal Git object database. Instead, the repository contains a small pointer file containing information such as:
+
+```text id="z5a3qk"
+version https://git-lfs.github.com/spec/v1
+oid sha256:<object-hash>
+size <file-size>
+```
+
+The `oid` identifies the actual object stored by LFS.
+
+**What we practiced:**
+
+1. Verified Git LFS installation:
+
+   ```bash
+   git lfs --version
+   ```
+
+2. Initialized Git LFS:
+
+   ```bash
+   git lfs install
+   ```
+
+3. Configured ZIP files to use LFS:
+
+   ```bash
+   git lfs track "*.zip"
+   ```
+
+4. Git automatically updated `.gitattributes`:
+
+   ```text id="8y7n2c"
+   *.zip filter=lfs diff=lfs merge=lfs -text
+   ```
+
+5. Created a ZIP file for practice.
+
+6. Added the ZIP file to Git:
+
+   ```bash
+   git add practice.zip
+   ```
+
+7. Verified that Git was tracking it through LFS:
+
+   ```bash
+   git lfs ls-files
+   ```
+
+8. Inspected the staged version and confirmed that Git stored an LFS pointer rather than the complete ZIP contents.
+
+9. Committed the LFS-tracked file.
+
+10. Pushed the repository and confirmed that the LFS object was uploaded successfully.
+
+**Important file: `.gitattributes`**
+
+Git LFS tracking rules are stored in `.gitattributes`.
+
+Example:
+
+```text id="5j8w2r"
+*.zip filter=lfs diff=lfs merge=lfs -text
+```
+
+This tells Git:
+
+> Files matching `*.zip` should be handled through Git LFS.
+
+Therefore `.gitattributes` should normally be committed and shared with the repository.
+
+**Useful commands:**
+
+```bash id="4s6m1p"
+# Check LFS version
+git lfs --version
+
+# Initialize LFS
+git lfs install
+
+# Track a file pattern
+git lfs track "*.zip"
+
+# Show LFS-tracked files
+git lfs ls-files
+
+# Show tracked patterns
+git lfs track
+
+# Fetch LFS objects
+git lfs fetch
+
+# Download LFS content
+git lfs pull
+```
+
+**Important distinction:**
+Git LFS is **not a replacement for Git**. Git still manages commits, branches, history, and repository metadata. LFS handles the storage of selected large files.
+
+**When to use LFS:**
+Use it when large binary files would unnecessarily inflate the normal Git repository—for example, large media, archives, or design assets.
+
+Do **not** normally use LFS for ordinary source files such as `.js`, `.ts`, `.jsx`, `.json`, or `.md`.
+
+**Mental model:**
+**Git tracks the file reference → Git LFS stores the large binary object → `.gitattributes` tells Git which files use LFS.**
+
+**Security/maintenance note:**
+Git LFS does not encrypt files or make sensitive files safe to commit. Do not use LFS as a method for hiding secrets.
+
+## 🚀 18. Signing
 
 - Signed commits
 - Signed tags
@@ -282,7 +432,93 @@ pop          → restore + remove
 - Trust/authenticity
 - Practical awareness
 
-## 19. Git Hooks
+### Footnote — GPG Signing
+
+**What is GPG?**
+GPG (GNU Privacy Guard) is an implementation of OpenPGP used for cryptographic signing, verification, encryption, and identity-related security tasks. In Git, we use it primarily to **sign commits**.
+
+**Why sign Git commits?**
+A normal Git commit contains author information such as name and email, but that information alone does not cryptographically prove who created the commit. GPG signing adds a cryptographic signature to the commit.
+
+**How the process works:**
+
+```text
+GPG key pair
+    │
+    ├── Private key → kept secret → signs the commit
+    │
+    └── Public key  → shared → verifies the signature
+                              │
+                              ↓
+                           GitHub
+                              │
+                              ↓
+                         "Verified"
+```
+
+**Private key vs public key:**
+
+- **Private key:** stays on the developer's computer and must never be shared.
+- **Public key:** can be shared with GitHub and others so they can verify signatures.
+- **Passphrase:** protects access to the private key.
+
+**What we configured:**
+
+```bash
+git config --global user.signingkey <KEY-ID>
+git config --global commit.gpgsign true
+```
+
+This means Git automatically asks GPG to sign new commits.
+
+**What we practiced:**
+
+1. Verified GPG installation.
+2. Generated an RSA 3072-bit GPG key.
+3. Configured Git to use the key.
+4. Enabled automatic commit signing.
+5. Created a signed commit.
+6. Verified the signature locally with:
+
+   ```bash
+   git log -1 --show-signature
+   ```
+
+7. Exported the public key.
+8. Added the public key to GitHub.
+9. Pushed the signed commit.
+10. Confirmed GitHub displayed **Verified**.
+
+**Important distinction:**
+GPG signing does **not** mean the code is correct, secure, or trustworthy. It verifies that the commit carries a valid cryptographic signature corresponding to the public key registered for the account.
+
+**Useful commands:**
+
+```bash
+# List secret keys
+gpg --list-secret-keys --keyid-format=long
+
+# Generate a key
+gpg --full-generate-key
+
+# Configure Git signing
+git config --global user.signingkey <KEY-ID>
+git config --global commit.gpgsign true
+
+# Show signature on latest commit
+git log -1 --show-signature
+
+# Export public key
+gpg --armor --export <KEY-ID>
+```
+
+**Mental model:**
+**Private key signs → public key verifies → GitHub confirms the signature → Verified.**
+
+**Security rule:**
+Never share the private key, private-key file, or GPG passphrase. The public key is the part intended for sharing.
+
+## 🚀 19. Git Hooks
 
 - What hooks are
 - Client-side hooks

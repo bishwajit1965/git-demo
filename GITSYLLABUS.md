@@ -149,7 +149,7 @@
 |
 |-------------------------------------------------------
 
-## 11. Rebase
+## 11. Rebase ✅
 
 - What rebase is
 - Rebase vs merge
@@ -163,7 +163,7 @@
 - Reordering/editing commits
 - When to use/not use rebase
 
-## 12. Stash
+## 12. Stash ✅
 
 - Why stash
 - Create stash
@@ -174,6 +174,58 @@
 - Clear
 - Stashing specific work
 - Practical use cases
+
+-----------------------------------------------------
+📌 git stash
+→ Temporarily save your tracked, uncommitted changes
+→ Working tree becomes clean
+→ Think: “Put my unfinished work aside.”
+
+📌 git stash list
+→ Show all saved stashes
+→ stash@{0} = newest
+→ stash@{1} = next older
+→ Think: “What unfinished work have I saved?”
+
+📌 git stash apply
+→ Restore a stash
+→ Keep the stash in the stash list
+→ Think: “Bring it back, but keep a backup.”
+
+📌 git stash pop
+→ Restore a stash
+→ Remove that stash from the stash list
+→ Think: “Bring it back and remove the backup.”
+
+📌 git stash drop
+→ Delete one stash without restoring it
+→ Example: git stash drop stash@{1}
+→ Think: “I don't need this saved work anymore.”
+
+📌 git stash push -u
+→ Stash tracked changes + untracked files
+→ -u = --include-untracked
+→ Think: “Save everything unfinished, including new files.”
+
+📌 git stash push -m "message"
+→ Save your changes with a meaningful description
+→ Makes multiple stashes easier to identify
+→ Example: git stash push -m "Work on login feature"
+
+📌 git stash clear
+→ Delete ALL saved stashes
+→ Cannot choose individual entries
+→ ⚠️ Use carefully
+→ Think: “Empty the entire stash stack.”
+
+-----------------------------------------------------
+
+stash        → save
+list         → see
+apply        → restore + keep
+pop          → restore + remove
+
+-----------------------------------------------------
 
 ## 13. Cherry-pick & Patch
 

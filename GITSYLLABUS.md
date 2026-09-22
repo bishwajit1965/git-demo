@@ -1,6 +1,6 @@
 # 📌 FINAL GIT SYLLABUS QUESTIONNAIRE — LOCKED
 
-## 1. Git Fundamentals ✅
+## 🚀 1. Git Fundamentals ✅
 
 - Git introduction
 - Git vs GitHub
@@ -18,7 +18,7 @@
 - Diff
 - Help
 
-## 2. Git History ✅
+## 🚀 2. Git History ✅
 
 - Log
 - Show
@@ -30,7 +30,7 @@
 - Commit messages
 - Amend
 
-## 3. Git Branching ✅
+## 🚀 3. Git Branching ✅
 
 - Branch concept
 - Create branch
@@ -42,7 +42,7 @@
 - Tracking branches
 - Feature branches
 
-## 4. Merge ✅
+## 🚀 4. Merge ✅
 
 - Fast-forward merge
 - Three-way merge
@@ -53,7 +53,7 @@
 - Abort merge
 - Merge history
 
-## 5. Git Workflow ✅
+## 🚀 5. Git Workflow ✅
 
 - Working with branches
 - Feature workflow
@@ -62,7 +62,7 @@
 - Clean commits
 - Team conventions
 
-## 6.GitHub & Remote Repositories ✅
+## 🚀 6.GitHub & Remote Repositories ✅
 
 - GitHub
 - Remote repositories
@@ -78,7 +78,7 @@
 - Tracking
 - Branch synchronization
 
-## 7. GitHub Authentication
+## 🚀 7. GitHub Authentication
 
 - HTTPS
 - SSH
@@ -87,7 +87,7 @@
 - Test authentication
 - Secure authentication practices
 
-## 8. Forking & Collaboration / Contribution ⭐ ✅
+## 🚀 8. Forking & Collaboration / Contribution ⭐ ✅
 
 - What is a fork?
 - Fork vs clone
@@ -102,7 +102,7 @@
 - Contributing to another repository
 - Open-source workflow
 
-## 9. Pull Requests ✅
+## 🚀 9. Pull Requests ✅
 
 - Create PR
 - PR branches
@@ -114,7 +114,7 @@
 - Delete feature branch
 - Keep local repository synchronized
 
-## 10. Undo & Modification
+## 🚀 10. Undo & Modification
 
 - restore → [restore → discard my file change]
 
@@ -149,7 +149,7 @@
 |
 |-------------------------------------------------------
 
-## 11. Rebase ✅
+## 🚀 11. Rebase ✅
 
 - What rebase is
 - Rebase vs merge
@@ -163,7 +163,7 @@
 - Reordering/editing commits
 - When to use/not use rebase
 
-## 12. Stash ✅
+## 🚀 12. Stash ✅
 
 - Why stash
 - Create stash
@@ -175,7 +175,7 @@
 - Stashing specific work
 - Practical use cases
 
-## FOOT NOTE ON stash
+### FOOT NOTE ON stash
 
 -----------------------------------------------------
 📌 git stash
@@ -229,7 +229,7 @@ pop          → restore + remove
 
 -----------------------------------------------------
 
-## 13. Cherry-pick & Patch
+## 🚀 13. Cherry-pick & Patch
 
 - Cherry-pick
 - Selective commit application
@@ -238,7 +238,236 @@ pop          → restore + remove
 - Patch concepts
 - When useful
 
-## 14. Tags & Releases
+### Footnote — Cherry-pick & Patch
+
+**What is `git cherry-pick`?**
+`git cherry-pick` takes the change introduced by a **specific existing commit** and applies that change onto the current branch.
+
+It is useful when you need **one particular commit** from another branch without merging the entire branch.
+
+**Mental model:**
+
+> **Cherry-pick = a gap-filling mechanism.**
+
+If another branch contains a useful commit:
+
+```text id="p8m4vz"
+main:       A ── B ── C
+                  \
+feature:           D ── E
+```
+
+and only commit `D` is needed on `main`:
+
+```bash id="x4n7kc"
+git cherry-pick <commit-hash>
+```
+
+Git applies the change introduced by `D` to the current branch and creates a **new commit** on that branch.
+
+Conceptually:
+
+```text id="r2q6wm"
+main:       A ── B ── C ── D'
+                  \
+feature:           D ── E
+```
+
+`D'` contains the same change as `D`, but it is a **different commit with a different commit identity**.
+
+---
+
+### Why use cherry-pick?
+
+Cherry-pick can be useful when:
+
+- One specific bug fix is needed on another branch.
+- A useful commit was made on the wrong branch.
+- A hotfix needs to be transferred to a release branch.
+- You need one isolated change rather than the entire branch history.
+
+It should not automatically replace merging or rebasing. The correct tool depends on the situation.
+
+---
+
+### What we learned
+
+The important distinction was:
+
+```text id="j7c3ns"
+Merge
+    ↓
+Bring branch histories together
+
+Rebase
+    ↓
+Replay a branch on a different base
+
+Cherry-pick
+    ↓
+Bring one specific commit's change
+```
+
+This is why cherry-pick is particularly useful when you need a **specific change rather than an entire line of development**.
+
+---
+
+### Basic workflow
+
+First identify the commit:
+
+```bash id="v5n8rx"
+git log --oneline
+```
+
+Then switch to the branch that should receive the change:
+
+```bash id="m3q7kp"
+git switch main
+```
+
+Then cherry-pick the required commit:
+
+```bash id="a6w2zt"
+git cherry-pick <commit-hash>
+```
+
+Git creates a new commit containing the selected change.
+
+---
+
+### Cherry-pick conflicts
+
+A cherry-pick can produce conflicts if the selected change cannot be applied cleanly to the current branch.
+
+Git may stop and show conflicted files.
+
+The normal recovery process is:
+
+```bash id="d9k4qw"
+git status
+```
+
+Resolve the conflicting files, then:
+
+```bash id="f2m8vc"
+git add <resolved-file>
+git cherry-pick --continue
+```
+
+If you decide not to continue:
+
+```bash id="s6r3xp"
+git cherry-pick --abort
+```
+
+This returns the repository to the state before the cherry-pick operation.
+
+---
+
+## What is a patch?
+
+A **patch** is a representation of changes between versions of files.
+
+Git can create a patch from a commit:
+
+```bash id="n7v4km"
+git format-patch -1 <commit-hash>
+```
+
+This produces a patch file that represents the commit's changes.
+
+A patch can then be applied elsewhere with:
+
+```bash id="q3w8zs"
+git apply <patch-file>
+```
+
+There is also:
+
+```bash id="h6p2rx"
+git am <patch-file>
+```
+
+which applies an email-style patch and can preserve commit metadata when the patch was produced by `git format-patch`.
+
+---
+
+### `git apply` vs `git am`
+
+```text id="u4k9nb"
+git apply
+    ↓
+Applies file changes
+    ↓
+Does not automatically create the original commit
+
+git am
+    ↓
+Applies a mail-formatted patch
+    ↓
+Can recreate the commit with its metadata
+```
+
+This distinction matters when working with patches as part of a contribution workflow.
+
+---
+
+### Important distinction
+
+Cherry-pick and patch are related but not identical:
+
+```text id="w8m3qz"
+Cherry-pick
+    ↓
+Select a Git commit
+    ↓
+Apply its change
+    ↓
+Create a new commit
+
+
+Patch
+    ↓
+Represent changes as a patch
+    ↓
+Transfer/apply those changes
+```
+
+Cherry-pick works directly with Git commits. A patch is a portable representation of changes.
+
+---
+
+### Useful commands
+
+```bash id="e5r7kx"
+# Find commits
+git log --oneline
+
+# Apply one commit
+git cherry-pick <commit-hash>
+
+# Continue after resolving a conflict
+git cherry-pick --continue
+
+# Cancel cherry-pick
+git cherry-pick --abort
+
+# Create a patch from a commit
+git format-patch -1 <commit-hash>
+
+# Apply a patch
+git apply <patch-file>
+
+# Apply a mail-formatted patch
+git am <patch-file>
+```
+
+### Mental model
+
+> **Cherry-pick m**
+
+## 🚀 14. Tags & Releases
 
 - Tags
 - Lightweight tags
@@ -249,7 +478,189 @@ pop          → restore + remove
 - Versioning
 - Release workflow
 
-## 15. .gitignore
+### Footnote — Tags & Releases
+
+**What is a Git tag?**
+A Git tag is a **named reference to a specific commit**.
+
+Instead of referring to a commit only by its hash:
+
+```text
+a1b2c3d...
+```
+
+we can give that commit a meaningful name:
+
+```text
+v1.0.0
+```
+
+Tags are commonly used to identify important points in a project's history, especially versions and releases.
+
+**Why use tags?**
+
+A branch such as `main` continues to move forward:
+
+```text
+A ── B ── C ── D ── E ── F
+          ↑
+        v1.0.0
+```
+
+The tag `v1.0.0` continues to identify commit `C` even after new commits are added.
+
+This makes it easy to say:
+
+> "This repository's version 1.0.0 corresponds to this exact commit."
+
+**Tag vs branch:**
+
+```text
+Branch
+    ↓
+Moves as new commits are added
+
+Tag
+    ↓
+Normally stays attached to the commit it identifies
+```
+
+This makes tags appropriate for marking versions, milestones, and other important historical points.
+
+-----------------------------------------------------
+
+### What is a release?
+
+A **GitHub Release** is a human-facing publication built around a particular Git tag.
+
+It can provide:
+
+- Version number
+- Release title
+- Release notes
+- Description of changes
+- Links/downloadable assets
+- Pre-release or stable-release status
+
+Think of it as:
+
+```text
+Git commit
+    ↓
+Git tag
+    ↓
+GitHub Release
+    ↓
+Human-readable published version
+```
+
+A tag identifies the exact code; a release communicates that version to people.
+
+---
+
+### What we practiced
+
+We created a lightweight version tag:
+
+```bash id="q7v3km"
+git tag v1.0.0
+```
+
+Then verified the tag:
+
+```bash id="c8n5rx"
+git tag
+```
+
+and pushed it to GitHub:
+
+```bash id="m4p9ws"
+git push origin v1.0.0
+```
+
+We then created a GitHub Release associated with `v1.0.0`.
+
+The release was deliberately marked as a **pre-release/test release**, with the description:
+
+```text
+It is a test release only.
+```
+
+This demonstrated the complete relationship between a Git commit, a tag, and a GitHub Release.
+
+---
+
+### Lightweight vs annotated tags
+
+A lightweight tag is essentially a simple named reference:
+
+```bash id="h2k6wd"
+git tag v1.0.0
+```
+
+An annotated tag stores additional tag information such as:
+
+- Tag message
+- Tagger
+- Tagging date
+- Tag object
+
+Example:
+
+```bash id="r5t8qn"
+git tag -a v1.0.0 -m "Release version 1.0.0"
+```
+
+For serious published releases, annotated tags are generally more informative because the tag itself carries metadata.
+
+---
+
+### Useful commands
+
+```bash id="z3f7kp"
+# Create a lightweight tag
+git tag v1.0.0
+
+# Create an annotated tag
+git tag -a v1.0.0 -m "Release version 1.0.0"
+
+# List tags
+git tag
+
+# Show tag information
+git show v1.0.0
+
+# Push one tag
+git push origin v1.0.0
+
+# Push all local tags
+git push origin --tags
+
+# Delete a local tag
+git tag -d v1.0.0
+
+# Delete a remote tag
+git push origin --delete v1.0.0
+```
+
+**Important:** Deleting a tag does not delete the commit itself. The commit remains part of Git history as long as it is otherwise reachable.
+
+---
+
+### Version naming
+
+A common convention is **Semantic Versioning**:
+
+```text
+MAJOR.MINOR.PATCH
+
+1.0.0
+│   │ │
+│   │ └── Patch: backward-compatible bug fixes
+│   └──── Minor: backward-c
+```
+
+## 🚀 15. .gitignore
 
 - Why it exists
 - Patterns
@@ -260,7 +671,159 @@ pop          → restore + remove
 - OS/editor files
 - Common mistakes
 
-## 16. .gitattributes
+### Footnote — `.gitignore`
+
+**What is `.gitignore`?**
+`.gitignore` is a repository-level file that tells Git which **untracked files and directories should normally be ignored**.
+
+It is commonly used for files that should remain on a developer's machine but should not become part of the repository, such as:
+
+- Secrets and credentials
+- Environment files
+- Dependencies such as `node_modules/`
+- Build output
+- Temporary files
+- IDE/editor files
+- Operating-system-generated files
+- Local development artifacts
+
+**Why use `.gitignore`?**
+A project usually contains files that are necessary for one developer's local environment but should not be committed to the shared repository.
+
+For example:
+
+```text id="p5x8zr"
+.env
+node_modules/
+dist/
+*.log
+```
+
+This keeps the repository cleaner and prevents accidental commits of files that do not belong in source control.
+
+**What we practiced:**
+
+Initially the repository contained:
+
+```text id="r2k6qm"
+GITSYLLABUS.md
+```
+
+in `.gitignore`.
+
+We then added:
+
+```text id="x7n4cs"
+secret.txt
+practice-secret.txt
+```
+
+This allowed us to demonstrate the difference between an **untracked ignored file** and a **file that Git is already tracking**.
+
+**Important behavior — `.gitignore` does not remove already tracked files.**
+
+We demonstrated this with `practice-secret.txt`.
+
+The sequence was:
+
+```text id="v8m3qt"
+File exists
+    ↓
+Git tracks the file
+    ↓
+Add the file to .gitignore
+    ↓
+Git continues tracking it
+```
+
+Adding a tracked file to `.gitignore` does **not** automatically remove it from Git.
+
+To stop tracking it while keeping the local file:
+
+```bash id="k4q9wp"
+git rm --cached practice-secret.txt
+```
+
+Then `.gitignore` can prevent it from being tracked again.
+
+The result is:
+
+```text id="m6s2fd"
+Repository → file no longer tracked
+Local machine → file still exists
+.gitignore → prevents it from being added again
+```
+
+**What we verified:**
+
+After removing `practice-secret.txt` from the index and committing the `.gitignore` change:
+
+```bash id="c3v7na"
+git status --ignored
+```
+
+showed the ignored files:
+
+```text id="f1x9qb"
+practice-secret.txt
+secret.txt
+```
+
+This confirmed that Git was ignoring them.
+
+**Important security distinction:**
+`.gitignore` is **not a security mechanism**.
+
+If a secret has already been committed and pushed:
+
+```text id="z9r4mk"
+Adding it to .gitignore
+        ↓
+does NOT erase the secret
+        ↓
+from Git history
+```
+
+If a real credential is accidentally exposed, it should be **revoked/rotated immediately**. Depending on the situation, the repository history may also need to be cleaned.
+
+**Useful commands:**
+
+```bash id="u2c8hj"
+# Check repository status
+git status
+
+# Show ignored files
+git status --ignored
+
+# Stop tracking a file but keep the local copy
+git rm --cached <file>
+
+# See which ignore rule applies to a file
+git check-ignore -v <file>
+```
+
+**Mental model:**
+
+> **`.gitignore` tells Git what untracked things to leave alone.**
+
+It does not delete files, does not untrack existing files, and does not erase previously committed secrets.
+
+**Relationship with `.gitattributes`:**
+
+```text id="e5w7kp"
+.gitignore
+    ↓
+What should Git ignore?
+
+.gitattributes
+    ↓
+How should Git treat tracked files?
+```
+
+**Practical rule:**
+Create `.gitignore` early in a project and define local-only files before they are accidentally committed.
+
+## 🚀 16. .gitattributes
 
 - What it does
 - Line endings
@@ -268,7 +831,116 @@ pop          → restore + remove
 - Why teams use it
 - Practical awareness
 
-## 17. Git LFS
+### Footnote — `.gitattributes`
+
+**What is `.gitattributes`?**
+`.gitattributes` is a Git configuration file stored inside a repository that defines **how Git should treat particular files or paths**.
+
+It can control things such as:
+
+- Line-ending behavior
+- Text vs binary classification
+- Git LFS tracking
+- Diff behavior
+- Merge behavior
+- File-specific Git attributes
+
+**Why is it important?**
+Different operating systems can use different line-ending conventions.
+
+For example:
+
+```text id="q1s8pz"
+Windows → CRLF
+Linux/macOS → LF
+```
+
+Without an agreed policy, a file can appear to have many changed lines simply because its line endings changed.
+
+`.gitattributes` allows a project to define a consistent repository-level policy.
+
+**What we configured:**
+
+```text id="z6r3kx"
+* text=auto
+*.txt text eol=lf
+```
+
+Meaning:
+
+- `* text=auto` → Git automatically determines whether files should be treated as text.
+- `*.txt text eol=lf` → `.txt` files are treated as text and normalized to LF line endings.
+
+This is especially useful when a project is developed across Windows, Linux, and macOS.
+
+**What we practiced:**
+
+1. Checked that the repository did not initially have `.gitattributes`.
+2. Created `.gitattributes`.
+3. Added text and line-ending rules.
+4. Committed the file to the repository.
+5. Later added the Git LFS rule to the same file:
+
+   ```text id="w5r2nc"
+   *.zip filter=lfs diff=lfs merge=lfs -text
+   ```
+
+This demonstrated that `.gitattributes` can control **different Git behaviors for different file types**.
+
+**Relationship with `.gitignore`:**
+
+These two files solve different problems:
+
+```text id="p7k4mz"
+.gitignore
+    ↓
+Which untracked files should Git ignore?
+
+.gitattributes
+    ↓
+How should Git treat tracked files?
+```
+
+Example:
+
+```text id="h4m9vx"
+.gitignore
+*.log
+```
+
+means Git should normally ignore matching untracked log files.
+
+Whereas:
+
+```text id="n2c6wd"
+*.txt text eol=lf
+```
+
+means Git should treat tracked `.txt` files as text and normalize their line endings.
+
+**Important:**
+`.gitattributes` does **not** determine whether a file is tracked or ignored. That is primarily the role of `.gitignore`.
+
+**Useful commands:**
+
+```bash id="a8k3qf"
+# Check the attributes applied to a file
+git check-attr -a -- path/to/file
+
+# Inspect the .gitattributes file
+cat .gitattributes
+
+# Check repository status
+git status
+```
+
+**Mental model:**
+**`.gitignore` controls what Git ignores; `.gitattributes` controls how Git treats files it knows about.**
+
+**Practical rule:**
+`.gitattributes` is especially valuable in shared repositories because the rules travel with the project and apply consistently to other contributors' clones.
+
+## 🚀 17. Git LFS
 
 - What it is
 - Why large files are a problem
@@ -527,7 +1199,7 @@ Never share the private key, private-key file, or GPG passphrase. The public key
 - Relationship to quality checks/CI
 - Practical awareness
 
-## 20. Submodules
+## 🚀 20. Submodules
 
 - What they are
 - Why they exist
@@ -537,7 +1209,7 @@ Never share the private key, private-key file, or GPG passphrase. The public key
 - When to use them
 - Practical awareness
 
-## 21. Advanced Remote Git
+## 🚀 21. Advanced Remote Git
 
 - Remote branches
 - Fetching
@@ -549,7 +1221,7 @@ Never share the private key, private-key file, or GPG passphrase. The public key
 - Divergence
 - Practical remote troubleshooting
 
-## 22. Recovery & Troubleshooting ⭐
+## 🚀 22. Recovery & Troubleshooting ⭐
 
 - Reflog
 - Recover deleted commits
@@ -565,7 +1237,7 @@ Never share the private key, private-key file, or GPG passphrase. The public key
 - Common Git errors
 - Recovery methodology
 
-## 23. Git + CI/CD
+## 🚀 23. Git + CI/CD
 
 Already learned separately, but we'll connect the pieces:
 
@@ -585,7 +1257,7 @@ Docker
      ↓
 Deployment
 
-## 24. Professional Team Simulation
+## 🚀 24. Professional Team Simulation
 
 We'll finish by operating git-demo like a real development repository:
 
